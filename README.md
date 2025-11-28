@@ -1,9 +1,13 @@
-# 🍽️ Recipe Catalog App
+# 🥘Aplikasi Resep Dapurku
 
-Aplikasi katalog resep sederhana menggunakan Flutter + Riverpod dengan fitur:
+Aplikasi katalog resep dapurku sederhana menggunakan Flutter + Riverpod dengan fitur:
+- Login aplikasi
 - Tambah resep
 - Lihat detail resep
 - Filter kategori
+- Riwayat edit resep
+- Info Aplikasi
+- Ubah nama user
 - UI clean & modern
 
 *Projek ini dibuat untuk memenuhi tugas UTS pada mata kuliah Pemrograman Mobile 2
@@ -16,22 +20,19 @@ Alvina Nindita Nareswari
 ### Home
 
 <p align="center">
-  <img src="docs/screenshots/home.jpeg" width="260"/>
-  <img src="docs/screenshots/favorite.jpeg" width="260"/>
-  <img src="docs/screenshots/add_recipe.jpeg" width="260"/>
-  <img src="docs/screenshots/pubspec.png" width="260"/>
+  <img src="docs/screenshots/halaman_awal.jpg" width="260"/>
+  <img src="docs/screenshots/login.jpg" width="260"/>
+  <img src="docs/screenshots/home.jpg" width="260"/>
+  <img src="docs/screenshots/sidebar" width="260"/>
+  <img src="docs/screenshots/riwayat_edit.jpg" width="260"/>
+  <img src="docs/screenshots/info_Apk.jpg" width="260"/>
+  <img src="docs/screenshots/tambah_resep.jpg" width="260"/>
+  <img src="docs/screenshots/edit_Resep.jpgr" width="260"/>
+  <img src="docs/screenshots/hapus_resep.jpg" width="260"/>
+  <img src="docs/screenshots/ubah_nama.jpg" width="260"/>
+  <img src="docs/screenshots/edit_Resep.jpgr" width="260"/>
+  <img src="docs/screenshots/detail_resep.jpgr" width="260"/>
 </p>
-
-
-
----
-
-## 📄 Laporan
-📘 **[Klik untuk membuka laporan](docs/laporan_aplikasi_catalog_resep_makanan.pdf)**
-
-## 🎥 Video Demo
-▶️ **[Klik untuk menonton video demo](https://drive.google.com/drive/folders/1I8t8toDwCKalpEbC3eJF6IXL6qDeDh6c?usp=drive_link)**
-
----
+</p>
 
 
