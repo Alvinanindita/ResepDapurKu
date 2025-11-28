@@ -30,8 +30,8 @@ Alvina Nindita Nareswari
   <img src="docs/screenshots/edit_Resep.jpgr" width="260"/>
   <img src="docs/screenshots/hapus_resep.jpg" width="260"/>
   <img src="docs/screenshots/ubah_nama.jpg" width="260"/>
-  <img src="docs/screenshots/edit_Resep.jpgr" width="260"/>
-  <img src="docs/screenshots/detail_resep.jpgr" width="260"/>
+  <img src="docs/screenshots/edit_Resep.jpg" width="260"/>
+  <img src="docs/screenshots/detail_resep.jpg" width="260"/>
 </p>
 </p>
 
