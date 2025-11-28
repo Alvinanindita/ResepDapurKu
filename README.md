@@ -17,8 +17,6 @@ Alvina Nindita Nareswari
 
 ---
 
-### Home
-
 <p align="center">
   <img src="docs/screenshots/halaman_awal.jpg" width="260"/>
   <img src="docs/screenshots/login.jpg" width="260"/>
