@@ -20,13 +20,18 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
   final _cookTimeController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _ingredientsController = TextEditingController();
+  
+  // Hapus _selectedSubCategory, ganti dengan controller untuk input teks kustom
+  final _subCategoryController = TextEditingController(); // ✨ CONTROLLER BARU
 
   String _selectedCategory = 'Indonesian';
   String _selectedDifficulty = 'Mudah';
   String _selectedEmoji = '🍳';
 
-  final List<String> _categories = ['Indonesian', 'Western', 'Dessert'];
+  final List<String> _categories = ['Indonesian', 'Western', 'Dessert', 'Lainnya']; // ✨ Tambah 'Lainnya' jika kategori utama ingin lebih fleksibel
   final List<String> _difficulties = ['Mudah', 'Sedang', 'Sulit'];
+
+  // Hapus _subCategoriesMap karena kita menggunakan input teks kustom.
 
   // Tambahan ikon makanan baru!
   final List<String> _emojis = [
@@ -44,7 +49,7 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
     super.initState();
     if (widget.recipe != null) {
       _nameController.text = widget.recipe!.name;
-      // Ambil hanya bagian angka dari cookTime saat Edit Mode
+
       final cookTimeParts = widget.recipe!.cookTime.split(' ');
       _cookTimeController.text = cookTimeParts.isNotEmpty && cookTimeParts.first.isNotEmpty
           ? cookTimeParts.first
@@ -52,7 +57,18 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
 
       _descriptionController.text = widget.recipe!.description;
       _ingredientsController.text = widget.recipe!.ingredients.join(', ');
-      _selectedCategory = widget.recipe!.category;
+      
+      // ✨ Logika pemisahan Category dan Sub-category saat Edit Mode
+      // Asumsikan format Category adalah: "Kategori Utama - Sub-kategori"
+      final categoryParts = widget.recipe!.category.split(' - ');
+      _selectedCategory = categoryParts[0];
+      
+      // Isi controller sub-category dari data yang tersimpan
+      if (categoryParts.length > 1) {
+        _subCategoryController.text = categoryParts[1];
+      }
+      // Jika hanya ada Kategori Utama (misalnya dari data lama), controller akan kosong.
+
       _selectedDifficulty = widget.recipe!.difficulty;
       _selectedEmoji = widget.recipe!.image;
     }
@@ -64,6 +80,7 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
     _cookTimeController.dispose();
     _descriptionController.dispose();
     _ingredientsController.dispose();
+    _subCategoryController.dispose(); // ✨ Jangan lupa dispose controller baru
     super.dispose();
   }
 
@@ -81,7 +98,15 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
       final rawCookTime = _cookTimeController.text.trim();
       final cookTime = rawCookTime.isNotEmpty
           ? '$rawCookTime menit'
-          : '0 menit'; 
+          : '0 menit';
+
+      // ✨ Ambil Sub-kategori dari input teks
+      final customSubCategory = _subCategoryController.text.trim().isEmpty 
+          ? 'Umum' // Beri nilai default jika kosong
+          : _subCategoryController.text.trim();
+
+      // Gabungkan Kategori Utama dan Sub-kategori Kustom
+      final fullCategory = '$_selectedCategory - $customSubCategory';
 
       if (widget.recipe != null) {
         // ===================================
@@ -89,7 +114,8 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
         // ===================================
         final updatedRecipe = widget.recipe!.copyWith(
           name: _nameController.text,
-          category: _selectedCategory,
+          // ✨ Simpan Kategori lengkap (utama + sub-kustom)
+          category: fullCategory,
           image: _selectedEmoji,
           cookTime: cookTime,
           difficulty: _selectedDifficulty,
@@ -107,15 +133,11 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
         // 2. Update History Provider
         final history = ref.read(historyProvider);
         
-        // Buat daftar riwayat baru:
-        // a. Masukkan resep yang baru diedit di awal.
-        // b. Filter riwayat lama untuk menghapus duplikat dari resep ini (agar yang terbaru selalu di depan).
         final newHistory = [
           updatedRecipe,
           ...history.where((r) => r.id != updatedRecipe.id),
         ];
 
-        // Batasi riwayat menjadi 10 item terbaru
         final limitedHistory = newHistory.length > 10 ? newHistory.sublist(0, 10) : newHistory;
 
         ref.read(historyProvider.notifier).state = limitedHistory;
@@ -147,9 +169,10 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
         final newRecipe = Recipe(
           id: newId,
           name: _nameController.text,
-          category: _selectedCategory,
+          // ✨ Simpan Kategori lengkap (utama + sub-kustom)
+          category: fullCategory,
           image: _selectedEmoji,
-          cookTime: cookTime, 
+          cookTime: cookTime,
           difficulty: _selectedDifficulty,
           description: _descriptionController.text,
           ingredients: ingredientsList,
@@ -226,9 +249,42 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
     );
   }
 
+  // ✨ Widget baru untuk Input Teks Sub-kategori
+  Widget _buildSubCategoryInput() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Sub-kategori Kustom ($_selectedCategory)',
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          controller: _subCategoryController,
+          decoration: InputDecoration(
+            labelText: 'Contoh: Padang, Italia, Puding Buah',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            prefixIcon: const Icon(Icons.category_outlined),
+            isDense: true,
+          ),
+          // Tidak perlu validator wajib, karena kita akan memberi nilai default jika kosong
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isEditMode = widget.recipe != null;
+
+    // Sub-kategori yang dipilih dari TextField
+    // final currentSubCategory = _subCategoryController.text; // Tidak perlu di sini
 
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -241,7 +297,7 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
         ),
         child: Column(
           children: [
-            // Header
+            // Header (Tidak Berubah)
             Container(
               padding: const EdgeInsets.all(20),
               decoration: const BoxDecoration(
@@ -282,7 +338,7 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
                 child: ListView(
                   padding: const EdgeInsets.all(20),
                   children: [
-                    // Emoji Selector
+                    // Emoji Selector (Tidak Berubah)
                     const Text(
                       'Pilih Icon Resep',
                       style: TextStyle(
@@ -297,7 +353,7 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey[300]!),
                         borderRadius: BorderRadius.circular(12),
-                        color: Colors.white, // Latar belakang putih
+                        color: Colors.white,
                       ),
                       child: GridView.builder(
                         padding: const EdgeInsets.all(8),
@@ -346,7 +402,7 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
                     ),
                     const SizedBox(height: 20),
 
-                    // Recipe Name
+                    // Recipe Name (Tidak Berubah)
                     TextFormField(
                       controller: _nameController,
                       decoration: InputDecoration(
@@ -366,18 +422,26 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
                     ),
                     const SizedBox(height: 16),
 
+                    // Kategori Utama (Chip Selector)
                     _buildChipSelector(
-                      label: 'Kategori',
+                      label: 'Kategori Utama',
                       options: _categories,
                       selectedValue: _selectedCategory,
                       onSelected: (value) {
                         setState(() {
                           _selectedCategory = value;
+                          // Opsional: Hapus input sub-kategori kustom saat kategori utama berubah
+                          // _subCategoryController.clear();
                         });
                       },
                     ),
                     const SizedBox(height: 16),
 
+                    // ✨ INPUT TEKS SUB-KATEGORI KUSTOM
+                    _buildSubCategoryInput(),
+                    const SizedBox(height: 16),
+                    
+                    // Tingkat Kesulitan (Tidak Berubah)
                     _buildChipSelector(
                       label: 'Tingkat Kesulitan',
                       options: _difficulties,
@@ -390,14 +454,13 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
                     ),
                     const SizedBox(height: 16),
 
-                    // Cook Time (Diubah untuk input angka)
+                    // Cook Time (Tidak Berubah)
                     TextFormField(
                       controller: _cookTimeController,
-                      // HANYA MENGIZINKAN INPUT ANGKA
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         labelText: 'Waktu Memasak (dalam menit, contoh: 30)',
-                        suffixText: 'menit', // Menampilkan 'menit' sebagai suffix
+                        suffixText: 'menit',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -408,7 +471,6 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
                         if (value == null || value.isEmpty) {
                           return 'Waktu memasak tidak boleh kosong';
                         }
-                        // Validasi sederhana: pastikan hanya mengandung digit
                         if (int.tryParse(value) == null) {
                           return 'Masukkan angka yang valid untuk waktu memasak';
                         }
@@ -417,7 +479,7 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
                     ),
                     const SizedBox(height: 16),
 
-                    // Description
+                    // Description (Tidak Berubah)
                     TextFormField(
                       controller: _descriptionController,
                       decoration: InputDecoration(
@@ -438,7 +500,7 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
                     ),
                     const SizedBox(height: 16),
 
-                    // Ingredients
+                    // Ingredients (Tidak Berubah)
                     TextFormField(
                       controller: _ingredientsController,
                       decoration: InputDecoration(
@@ -460,7 +522,7 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
                     ),
                     const SizedBox(height: 20),
 
-                    // Save Button
+                    // Save Button (Tidak Berubah)
                     ElevatedButton(
                       onPressed: _saveRecipe,
                       style: ElevatedButton.styleFrom(
@@ -469,7 +531,7 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        elevation: 4, // Menambah elevasi tombol
+                        elevation: 4,
                       ),
                       child: Text(
                         isEditMode ? 'Perbarui Resep' : 'Simpan Resep',
