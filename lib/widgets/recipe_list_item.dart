@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/recipe.dart';
-import '../providers/recipe_providers.dart';
 import '../providers/user_provider.dart';
 import 'recipe_detail_sheet.dart';
 

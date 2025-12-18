@@ -111,7 +111,7 @@ class RecipeHomePage extends ConsumerWidget {
               decoration: InputDecoration(
                 hintText: "Cari resep...",
                 hintStyle: TextStyle(color: Colors.grey[600]),
-                prefixIcon: Icon(Icons.search, size: 20, color: primaryDark),
+                prefixIcon: const Icon(Icons.search, size: 20, color: primaryDark),
                 suffixIcon: searchQuery.isNotEmpty
                     ? IconButton(
                         icon: const Icon(Icons.clear, size: 20, color: Colors.grey),

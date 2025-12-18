@@ -20,36 +20,29 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
   final _cookTimeController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _ingredientsController = TextEditingController();
-  
-  // Hapus _selectedSubCategory, ganti dengan controller untuk input teks kustom
-  final _subCategoryController = TextEditingController(); // ✨ CONTROLLER BARU
+  final _subCategoryController = TextEditingController(); 
 
   String _selectedCategory = 'Indonesian';
   String _selectedDifficulty = 'Mudah';
   String _selectedEmoji = '🍳';
 
-  final List<String> _categories = ['Indonesian', 'Western', 'Dessert', 'Lainnya']; // ✨ Tambah 'Lainnya' jika kategori utama ingin lebih fleksibel
+  final List<String> _categories = ['Indonesian', 'Western', 'Dessert', 'Lainnya'];
   final List<String> _difficulties = ['Mudah', 'Sedang', 'Sulit'];
-
-  // Hapus _subCategoriesMap karena kita menggunakan input teks kustom.
-
-  // Tambahan ikon makanan baru!
   final List<String> _emojis = [
     '🍳', '🍝', '🍖', '🥞', '🍲', '🥗', '🍰', '🥙',
     '🍔', '🍕', '🍜', '🍱', '🥘', '🍛', '🍣', '🥟',
     '🌮', '🌯', '🥪', '🍩', '🧁', '🍪', '🥧', '🍦',
-    '🥓', '🍗', '🍤', '🦐', '🦞', '🍢', '🍡', '🥮',
+    ' Bacon', '🍗', '🍤', '🦐', '🦞', '🍢', '🍡', '🥮',
   ];
 
-  static const Color primaryDark = Color.fromARGB(255, 30, 205, 117); // #1ECD75 (Aksen Cerah/Fresh)
-  static const Color primaryMain = Color(0xFF4A9969); // Hijau Hutan/Dasar
+  static const Color primaryDark = Color.fromARGB(255, 30, 205, 117);
+  static const Color primaryMain = Color(0xFF4A9969);
 
   @override
   void initState() {
     super.initState();
     if (widget.recipe != null) {
       _nameController.text = widget.recipe!.name;
-
       final cookTimeParts = widget.recipe!.cookTime.split(' ');
       _cookTimeController.text = cookTimeParts.isNotEmpty && cookTimeParts.first.isNotEmpty
           ? cookTimeParts.first
@@ -58,16 +51,12 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
       _descriptionController.text = widget.recipe!.description;
       _ingredientsController.text = widget.recipe!.ingredients.join(', ');
       
-      // ✨ Logika pemisahan Category dan Sub-category saat Edit Mode
-      // Asumsikan format Category adalah: "Kategori Utama - Sub-kategori"
       final categoryParts = widget.recipe!.category.split(' - ');
       _selectedCategory = categoryParts[0];
       
-      // Isi controller sub-category dari data yang tersimpan
       if (categoryParts.length > 1) {
         _subCategoryController.text = categoryParts[1];
       }
-      // Jika hanya ada Kategori Utama (misalnya dari data lama), controller akan kosong.
 
       _selectedDifficulty = widget.recipe!.difficulty;
       _selectedEmoji = widget.recipe!.image;
@@ -80,13 +69,15 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
     _cookTimeController.dispose();
     _descriptionController.dispose();
     _ingredientsController.dispose();
-    _subCategoryController.dispose(); // ✨ Jangan lupa dispose controller baru
+    _subCategoryController.dispose();
     super.dispose();
   }
 
   void _saveRecipe() {
     if (_formKey.currentState!.validate()) {
       final recipes = ref.read(recipesProvider);
+      // ✨ Ambil notifier untuk menyimpan data secara permanen
+      final notifier = ref.read(recipesProvider.notifier);
 
       final ingredientsList = _ingredientsController.text
           .split(RegExp(r'[,\n]'))
@@ -94,27 +85,21 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
           .where((e) => e.isNotEmpty)
           .toList();
 
-      // Logika untuk Waktu Memasak
       final rawCookTime = _cookTimeController.text.trim();
-      final cookTime = rawCookTime.isNotEmpty
-          ? '$rawCookTime menit'
-          : '0 menit';
+      final cookTime = rawCookTime.isNotEmpty ? '$rawCookTime menit' : '0 menit';
 
-      // ✨ Ambil Sub-kategori dari input teks
       final customSubCategory = _subCategoryController.text.trim().isEmpty 
-          ? 'Umum' // Beri nilai default jika kosong
+          ? 'Umum' 
           : _subCategoryController.text.trim();
 
-      // Gabungkan Kategori Utama dan Sub-kategori Kustom
       final fullCategory = '$_selectedCategory - $customSubCategory';
 
       if (widget.recipe != null) {
         // ===================================
-        // ✨ LOGIKA EDIT MODE DENGAN HISTORY
+        // LOGIKA EDIT MODE (SIMPAN PERMANEN)
         // ===================================
         final updatedRecipe = widget.recipe!.copyWith(
           name: _nameController.text,
-          // ✨ Simpan Kategori lengkap (utama + sub-kustom)
           category: fullCategory,
           image: _selectedEmoji,
           cookTime: cookTime,
@@ -127,49 +112,28 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
           return r.id == updatedRecipe.id ? updatedRecipe : r;
         }).toList();
 
-        // 1. Update daftar resep utama
-        ref.read(recipesProvider.notifier).state = updatedRecipes;
+        // 1. Update daftar resep & Auto-Save ke Shared Preferences
+        notifier.updateRecipes(updatedRecipes);
 
         // 2. Update History Provider
         final history = ref.read(historyProvider);
-        
         final newHistory = [
           updatedRecipe,
           ...history.where((r) => r.id != updatedRecipe.id),
         ];
-
-        final limitedHistory = newHistory.length > 10 ? newHistory.sublist(0, 10) : newHistory;
-
-        ref.read(historyProvider.notifier).state = limitedHistory;
+        ref.read(historyProvider.notifier).state = newHistory.take(10).toList();
 
         Navigator.pop(context);
-
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Row(
-              children: [
-                Icon(Icons.check_circle, color: Colors.white),
-                SizedBox(width: 8),
-                Text('Resep berhasil diperbarui!'),
-              ],
-            ),
-            backgroundColor: Colors.green,
-            duration: Duration(seconds: 2),
-            behavior: SnackBarBehavior.floating,
-          ),
+          const SnackBar(content: Text('Resep berhasil diperbarui secara permanen!'), backgroundColor: Colors.green),
         );
       } else {
         // ===================================
-        // LOGIKA ADD MODE (TAMBAH RESEP BARU)
+        // LOGIKA TAMBAH MODE (SIMPAN PERMANEN)
         // ===================================
-        
-        // Asumsi Recipe id dihitung berdasarkan panjang list.
-        final newId = (recipes.length + 1).toString();
-
         final newRecipe = Recipe(
-          id: newId,
+          id: DateTime.now().millisecondsSinceEpoch.toString(), // ✨ ID Unik
           name: _nameController.text,
-          // ✨ Simpan Kategori lengkap (utama + sub-kustom)
           category: fullCategory,
           image: _selectedEmoji,
           cookTime: cookTime,
@@ -178,23 +142,12 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
           ingredients: ingredientsList,
         );
 
-        ref.read(recipesProvider.notifier).state = [...recipes, newRecipe];
+        // Update daftar resep & Auto-Save ke Shared Preferences
+        notifier.updateRecipes([...recipes, newRecipe]);
 
         Navigator.pop(context);
-
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Row(
-              children: [
-                Icon(Icons.check_circle, color: Colors.white),
-                SizedBox(width: 8),
-                Text('Resep berhasil ditambahkan!'),
-              ],
-            ),
-            backgroundColor: Colors.green,
-            duration: Duration(seconds: 2),
-            behavior: SnackBarBehavior.floating,
-          ),
+          const SnackBar(content: Text('Resep baru berhasil disimpan ke HP!'), backgroundColor: Colors.green),
         );
       }
     }
@@ -210,14 +163,7 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
-        ),
+        Text(label, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black87)),
         const SizedBox(height: 8),
         Wrap(
           spacing: 8.0,
@@ -227,21 +173,14 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
               label: Text(item),
               selected: isSelected,
               selectedColor: primaryMain.withOpacity(0.1),
-              onSelected: (selected) {
-                if (selected) onSelected(item);
-              },
+              onSelected: (selected) { if (selected) onSelected(item); },
               backgroundColor: Colors.grey[100],
               labelStyle: TextStyle(
                 color: isSelected ? primaryDark : Colors.black87,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),
-              side: BorderSide(
-                color: isSelected ? primaryDark : Colors.grey.shade300,
-                width: 1.2,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
+              side: BorderSide(color: isSelected ? primaryDark : Colors.grey.shade300, width: 1.2),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             );
           }).toList(),
         ),
@@ -249,31 +188,20 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
     );
   }
 
-  // ✨ Widget baru untuk Input Teks Sub-kategori
   Widget _buildSubCategoryInput() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Sub-kategori Kustom ($_selectedCategory)',
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
-        ),
+        Text('Sub-kategori Kustom ($_selectedCategory)', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black87)),
         const SizedBox(height: 8),
         TextFormField(
           controller: _subCategoryController,
           decoration: InputDecoration(
             labelText: 'Contoh: Padang, Italia, Puding Buah',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
             prefixIcon: const Icon(Icons.category_outlined),
             isDense: true,
           ),
-          // Tidak perlu validator wajib, karena kita akan memberi nilai default jika kosong
         ),
       ],
     );
@@ -283,71 +211,36 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
   Widget build(BuildContext context) {
     final isEditMode = widget.recipe != null;
 
-    // Sub-kategori yang dipilih dari TextField
-    // final currentSubCategory = _subCategoryController.text; // Tidak perlu di sini
-
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Container(
-        constraints: const BoxConstraints(
-          maxWidth: 600,
-          maxHeight: 750,
-        ),
+        constraints: const BoxConstraints(maxWidth: 600, maxHeight: 750),
         child: Column(
           children: [
-            // Header (Tidak Berubah)
             Container(
               padding: const EdgeInsets.all(20),
               decoration: const BoxDecoration(
                 color: primaryDark,
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(20),
-                ),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               ),
               child: Row(
                 children: [
-                  Icon(
-                    isEditMode ? Icons.edit : Icons.add_circle,
-                    color: Colors.white,
-                    size: 28,
-                  ),
+                  Icon(isEditMode ? Icons.edit : Icons.add_circle, color: Colors.white, size: 28),
                   const SizedBox(width: 12),
-                  Text(
-                    isEditMode ? 'Edit Resep' : 'Tambah Resep',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
+                  Text(isEditMode ? 'Edit Resep' : 'Tambah Resep', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
                   const Spacer(),
-                  IconButton(
-                    icon: const Icon(Icons.close, color: Colors.white),
-                    onPressed: () => Navigator.pop(context),
-                  ),
+                  IconButton(icon: const Icon(Icons.close, color: Colors.white), onPressed: () => Navigator.pop(context)),
                 ],
               ),
             ),
-
-            // Form Content
             Expanded(
               child: Form(
                 key: _formKey,
                 child: ListView(
                   padding: const EdgeInsets.all(20),
                   children: [
-                    // Emoji Selector (Tidak Berubah)
-                    const Text(
-                      'Pilih Icon Resep',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    const Text('Pilih Icon Resep', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 8),
-
                     Container(
                       height: 120,
                       decoration: BoxDecoration(
@@ -358,189 +251,92 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
                       child: GridView.builder(
                         padding: const EdgeInsets.all(8),
                         scrollDirection: Axis.horizontal,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          childAspectRatio: 1,
-                          crossAxisSpacing: 4,
-                          mainAxisSpacing: 4,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3, childAspectRatio: 1, crossAxisSpacing: 4, mainAxisSpacing: 4,
                         ),
                         itemCount: _emojis.length,
                         itemBuilder: (context, index) {
                           final emoji = _emojis[index];
                           final isSelected = emoji == _selectedEmoji;
                           return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _selectedEmoji = emoji;
-                              });
-                            },
+                            onTap: () { setState(() { _selectedEmoji = emoji; }); },
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 200),
                               decoration: BoxDecoration(
-                                color: isSelected
-                                    ? primaryMain.withOpacity(0.2)
-                                    : Colors.transparent,
+                                color: isSelected ? primaryMain.withOpacity(0.2) : Colors.transparent,
                                 borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                  color: isSelected
-                                      ? primaryDark
-                                      : Colors.transparent,
-                                  width: 2,
-                                ),
+                                border: Border.all(color: isSelected ? primaryDark : Colors.transparent, width: 2),
                               ),
-                              child: Center(
-                                child: Text(
-                                  emoji,
-                                  style: const TextStyle(fontSize: 28),
-                                ),
-                              ),
+                              child: Center(child: Text(emoji, style: const TextStyle(fontSize: 28))),
                             ),
                           );
                         },
                       ),
                     ),
                     const SizedBox(height: 20),
-
-                    // Recipe Name (Tidak Berubah)
                     TextFormField(
                       controller: _nameController,
                       decoration: InputDecoration(
                         labelText: 'Nama Resep',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                         prefixIcon: const Icon(Icons.restaurant_menu),
                         isDense: true,
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Nama resep tidak boleh kosong';
-                        }
-                        return null;
-                      },
+                      validator: (value) => (value == null || value.isEmpty) ? 'Nama resep tidak boleh kosong' : null,
                     ),
                     const SizedBox(height: 16),
-
-                    // Kategori Utama (Chip Selector)
-                    _buildChipSelector(
-                      label: 'Kategori Utama',
-                      options: _categories,
-                      selectedValue: _selectedCategory,
-                      onSelected: (value) {
-                        setState(() {
-                          _selectedCategory = value;
-                          // Opsional: Hapus input sub-kategori kustom saat kategori utama berubah
-                          // _subCategoryController.clear();
-                        });
-                      },
-                    ),
+                    _buildChipSelector(label: 'Kategori Utama', options: _categories, selectedValue: _selectedCategory, onSelected: (value) { setState(() { _selectedCategory = value; }); }),
                     const SizedBox(height: 16),
-
-                    // ✨ INPUT TEKS SUB-KATEGORI KUSTOM
                     _buildSubCategoryInput(),
                     const SizedBox(height: 16),
-                    
-                    // Tingkat Kesulitan (Tidak Berubah)
-                    _buildChipSelector(
-                      label: 'Tingkat Kesulitan',
-                      options: _difficulties,
-                      selectedValue: _selectedDifficulty,
-                      onSelected: (value) {
-                        setState(() {
-                          _selectedDifficulty = value;
-                        });
-                      },
-                    ),
+                    _buildChipSelector(label: 'Tingkat Kesulitan', options: _difficulties, selectedValue: _selectedDifficulty, onSelected: (value) { setState(() { _selectedDifficulty = value; }); }),
                     const SizedBox(height: 16),
-
-                    // Cook Time (Tidak Berubah)
                     TextFormField(
                       controller: _cookTimeController,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        labelText: 'Waktu Memasak (dalam menit, contoh: 30)',
+                        labelText: 'Waktu Memasak (menit)',
                         suffixText: 'menit',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                         prefixIcon: const Icon(Icons.access_time),
                         isDense: true,
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Waktu memasak tidak boleh kosong';
-                        }
-                        if (int.tryParse(value) == null) {
-                          return 'Masukkan angka yang valid untuk waktu memasak';
-                        }
-                        return null;
-                      },
+                      validator: (value) => (value == null || value.isEmpty) ? 'Waktu memasak wajib diisi' : null,
                     ),
                     const SizedBox(height: 16),
-
-                    // Description (Tidak Berubah)
                     TextFormField(
                       controller: _descriptionController,
                       decoration: InputDecoration(
                         labelText: 'Deskripsi',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                         prefixIcon: const Icon(Icons.description),
                         isDense: true,
                       ),
                       maxLines: 2,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Deskripsi tidak boleh kosong';
-                        }
-                        return null;
-                      },
+                      validator: (value) => (value == null || value.isEmpty) ? 'Deskripsi wajib diisi' : null,
                     ),
                     const SizedBox(height: 16),
-
-                    // Ingredients (Tidak Berubah)
                     TextFormField(
                       controller: _ingredientsController,
                       decoration: InputDecoration(
                         labelText: 'Bahan-bahan',
                         hintText: 'Pisahkan dengan koma atau enter',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                         prefixIcon: const Icon(Icons.list_alt),
                         isDense: true,
                       ),
                       maxLines: 3,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Bahan-bahan tidak boleh kosong';
-                        }
-                        return null;
-                      },
+                      validator: (value) => (value == null || value.isEmpty) ? 'Bahan wajib diisi' : null,
                     ),
                     const SizedBox(height: 20),
-
-                    // Save Button (Tidak Berubah)
                     ElevatedButton(
                       onPressed: _saveRecipe,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryDark,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
+                        backgroundColor: primaryDark, padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         elevation: 4,
                       ),
-                      child: Text(
-                        isEditMode ? 'Perbarui Resep' : 'Simpan Resep',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
+                      child: Text(isEditMode ? 'Perbarui Resep' : 'Simpan Resep', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
                     ),
                   ],
                 ),

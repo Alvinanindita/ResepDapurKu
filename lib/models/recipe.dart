@@ -19,7 +19,34 @@ class Recipe {
     required this.ingredients,
   });
 
-  // Copy with method untuk update recipe
+  // ✨ Ubah ke Map untuk JSON
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'category': category,
+      'image': image,
+      'cookTime': cookTime,
+      'difficulty': difficulty,
+      'description': description,
+      'ingredients': ingredients,
+    };
+  }
+
+  // ✨ Ambil dari Map (JSON)
+  factory Recipe.fromMap(Map<String, dynamic> map) {
+    return Recipe(
+      id: map['id'],
+      name: map['name'],
+      category: map['category'],
+      image: map['image'],
+      cookTime: map['cookTime'],
+      difficulty: map['difficulty'],
+      description: map['description'],
+      ingredients: List<String>.from(map['ingredients']),
+    );
+  }
+
   Recipe copyWith({
     String? id,
     String? name,
