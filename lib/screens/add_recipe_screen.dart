@@ -73,11 +73,13 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
     super.dispose();
   }
 
+  // Cari bagian void _saveRecipe() dan sesuaikan logikanya:
+
   void _saveRecipe() {
     if (_formKey.currentState!.validate()) {
       final recipes = ref.read(recipesProvider);
-      // ✨ Ambil notifier untuk menyimpan data secara permanen
       final notifier = ref.read(recipesProvider.notifier);
+      final historyNotifier = ref.read(historyProvider.notifier); // ✨ Ambil history notifier
 
       final ingredientsList = _ingredientsController.text
           .split(RegExp(r'[,\n]'))
@@ -87,17 +89,11 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
 
       final rawCookTime = _cookTimeController.text.trim();
       final cookTime = rawCookTime.isNotEmpty ? '$rawCookTime menit' : '0 menit';
-
-      final customSubCategory = _subCategoryController.text.trim().isEmpty 
-          ? 'Umum' 
-          : _subCategoryController.text.trim();
-
+      final customSubCategory = _subCategoryController.text.trim().isEmpty ? 'Umum' : _subCategoryController.text.trim();
       final fullCategory = '$_selectedCategory - $customSubCategory';
 
       if (widget.recipe != null) {
-        // ===================================
-        // LOGIKA EDIT MODE (SIMPAN PERMANEN)
-        // ===================================
+        // --- MODE EDIT ---
         final updatedRecipe = widget.recipe!.copyWith(
           name: _nameController.text,
           category: fullCategory,
@@ -108,31 +104,22 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
           ingredients: ingredientsList,
         );
 
-        final updatedRecipes = recipes.map((r) {
-          return r.id == updatedRecipe.id ? updatedRecipe : r;
-        }).toList();
+        final updatedRecipes = recipes.map((r) => r.id == updatedRecipe.id ? updatedRecipe : r).toList();
 
-        // 1. Update daftar resep & Auto-Save ke Shared Preferences
+        // Simpan daftar resep utama
         notifier.updateRecipes(updatedRecipes);
 
-        // 2. Update History Provider
-        final history = ref.read(historyProvider);
-        final newHistory = [
-          updatedRecipe,
-          ...history.where((r) => r.id != updatedRecipe.id),
-        ];
-        ref.read(historyProvider.notifier).state = newHistory.take(10).toList();
+        // ✨ Simpan ke History secara permanen
+        historyNotifier.addToHistory(updatedRecipe);
 
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Resep berhasil diperbarui secara permanen!'), backgroundColor: Colors.green),
+          const SnackBar(content: Text('Resep diperbarui & riwayat disimpan!'), backgroundColor: Colors.green),
         );
       } else {
-        // ===================================
-        // LOGIKA TAMBAH MODE (SIMPAN PERMANEN)
-        // ===================================
+        // --- MODE TAMBAH BARU ---
         final newRecipe = Recipe(
-          id: DateTime.now().millisecondsSinceEpoch.toString(), // ✨ ID Unik
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
           name: _nameController.text,
           category: fullCategory,
           image: _selectedEmoji,
@@ -142,12 +129,11 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
           ingredients: ingredientsList,
         );
 
-        // Update daftar resep & Auto-Save ke Shared Preferences
         notifier.updateRecipes([...recipes, newRecipe]);
 
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Resep baru berhasil disimpan ke HP!'), backgroundColor: Colors.green),
+          const SnackBar(content: Text('Resep baru berhasil disimpan!'), backgroundColor: Colors.green),
         );
       }
     }

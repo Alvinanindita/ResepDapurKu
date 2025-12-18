@@ -25,8 +25,9 @@ class HistoryScreen extends ConsumerWidget {
             onPressed: historyRecipes.isEmpty 
               ? null 
               : () {
-                // Clear state history
-                ref.read(historyProvider.notifier).state = [];
+                // ✨ Panggil fungsi clear dari notifier agar terhapus juga di memori HP
+                ref.read(historyProvider.notifier).clearHistory();
+                
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Riwayat berhasil dibersihkan')),
                 );
@@ -59,8 +60,9 @@ class HistoryScreen extends ConsumerWidget {
               padding: const EdgeInsets.all(16),
               itemCount: historyRecipes.length,
               itemBuilder: (context, index) {
-                // Tampilkan dari yang terbaru (index 0)
-                final recipe = historyRecipes[historyRecipes.length - 1 - index];
+                // Karena HistoryNotifier sudah menyimpan yang terbaru di index 0,
+                // kita langsung pakai index saja.
+                final recipe = historyRecipes[index];
                 return RecipeListItem(recipe: recipe);
               },
             ),
