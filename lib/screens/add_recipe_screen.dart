@@ -32,7 +32,7 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
     '🍳', '🍝', '🍖', '🥞', '🍲', '🥗', '🍰', '🥙',
     '🍔', '🍕', '🍜', '🍱', '🥘', '🍛', '🍣', '🥟',
     '🌮', '🌯', '🥪', '🍩', '🧁', '🍪', '🥧', '🍦',
-    ' Bacon', '🍗', '🍤', '🦐', '🦞', '🍢', '🍡', '🥮',
+    '🍗', '🍤', '🦐', '🦞', '🍢', '🍡', '🥮',
   ];
 
   static const Color primaryDark = Color.fromARGB(255, 30, 205, 117);
@@ -73,13 +73,11 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
     super.dispose();
   }
 
-  // Cari bagian void _saveRecipe() dan sesuaikan logikanya:
-
   void _saveRecipe() {
     if (_formKey.currentState!.validate()) {
       final recipes = ref.read(recipesProvider);
       final notifier = ref.read(recipesProvider.notifier);
-      final historyNotifier = ref.read(historyProvider.notifier); // ✨ Ambil history notifier
+      final historyNotifier = ref.read(historyProvider.notifier);
 
       final ingredientsList = _ingredientsController.text
           .split(RegExp(r'[,\n]'))
@@ -93,7 +91,6 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
       final fullCategory = '$_selectedCategory - $customSubCategory';
 
       if (widget.recipe != null) {
-        // --- MODE EDIT ---
         final updatedRecipe = widget.recipe!.copyWith(
           name: _nameController.text,
           category: fullCategory,
@@ -105,19 +102,14 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
         );
 
         final updatedRecipes = recipes.map((r) => r.id == updatedRecipe.id ? updatedRecipe : r).toList();
-
-        // Simpan daftar resep utama
         notifier.updateRecipes(updatedRecipes);
-
-        // ✨ Simpan ke History secara permanen
         historyNotifier.addToHistory(updatedRecipe);
 
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Resep diperbarui & riwayat disimpan!'), backgroundColor: Colors.green),
+          const SnackBar(content: Text('Resep diperbarui & riwayat disimpan!'), backgroundColor: Colors.green, behavior: SnackBarBehavior.floating),
         );
       } else {
-        // --- MODE TAMBAH BARU ---
         final newRecipe = Recipe(
           id: DateTime.now().millisecondsSinceEpoch.toString(),
           name: _nameController.text,
@@ -133,13 +125,181 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
 
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Resep baru berhasil disimpan!'), backgroundColor: Colors.green),
+          const SnackBar(content: Text('Resep baru berhasil disimpan!'), backgroundColor: Colors.green, behavior: SnackBarBehavior.floating),
         );
       }
     }
   }
 
-  // --- Widget Kustom untuk Segmented Chip Button ---
+  InputDecoration _buildInputDecoration(String label, IconData icon) {
+    return InputDecoration(
+      labelText: label,
+      prefixIcon: Icon(icon, color: primaryMain),
+      filled: true,
+      fillColor: Colors.grey[50],
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: primaryDark, width: 1.5)),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isEditMode = widget.recipe != null;
+
+    return Dialog(
+      insetPadding: const EdgeInsets.all(16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 500, maxHeight: 800),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Header yang lebih cantik
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: const BoxDecoration(
+                color: primaryDark,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(12)),
+                    child: Icon(isEditMode ? Icons.edit_rounded : Icons.add_rounded, color: Colors.white, size: 28),
+                  ),
+                  const SizedBox(width: 16),
+                  Text(
+                    isEditMode ? 'Edit Resep' : 'Resep Baru',
+                    style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: Colors.white),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.close_rounded, color: Colors.white),
+                    style: IconButton.styleFrom(backgroundColor: Colors.white.withOpacity(0.1)),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Form(
+                key: _formKey,
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
+                  children: [
+                    const SizedBox(height: 16),
+                    const _SectionTitle(title: 'Ikon Masakan'),
+                    const SizedBox(height: 12),
+                    Container(
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: GridView.builder(
+                        padding: const EdgeInsets.all(12),
+                        scrollDirection: Axis.horizontal,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 1, mainAxisSpacing: 12,
+                        ),
+                        itemCount: _emojis.length,
+                        itemBuilder: (context, index) {
+                          final emoji = _emojis[index];
+                          final isSelected = emoji == _selectedEmoji;
+                          return GestureDetector(
+                            onTap: () => setState(() => _selectedEmoji = emoji),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              decoration: BoxDecoration(
+                                color: isSelected ? Colors.white : Colors.transparent,
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: isSelected ? [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 4))] : [],
+                                border: Border.all(color: isSelected ? primaryDark : Colors.transparent, width: 2),
+                              ),
+                              child: Center(child: Text(emoji, style: const TextStyle(fontSize: 32))),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    const _SectionTitle(title: 'Informasi Dasar'),
+                    const SizedBox(height: 12),
+                    TextFormField(
+                      controller: _nameController,
+                      decoration: _buildInputDecoration('Nama Resep', Icons.restaurant_menu_rounded),
+                      validator: (value) => (value == null || value.isEmpty) ? 'Nama resep tidak boleh kosong' : null,
+                    ),
+                    const SizedBox(height: 16),
+                    _buildChipSelector(
+                      label: 'Kategori Utama', 
+                      options: _categories, 
+                      selectedValue: _selectedCategory, 
+                      onSelected: (value) => setState(() => _selectedCategory = value)
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _subCategoryController,
+                      decoration: _buildInputDecoration('Sub-kategori (Contoh: Padang)', Icons. category_rounded),
+                    ),
+                    const SizedBox(height: 24),
+                    const _SectionTitle(title: 'Detail Memasak'),
+                    const SizedBox(height: 12),
+                    _buildChipSelector(
+                      label: 'Tingkat Kesulitan', 
+                      options: _difficulties, 
+                      selectedValue: _selectedDifficulty, 
+                      onSelected: (value) => setState(() => _selectedDifficulty = value)
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _cookTimeController,
+                      keyboardType: TextInputType.number,
+                      decoration: _buildInputDecoration('Waktu Memasak (menit)', Icons.timer_rounded),
+                      validator: (value) => (value == null || value.isEmpty) ? 'Waktu wajib diisi' : null,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _descriptionController,
+                      maxLines: 2,
+                      decoration: _buildInputDecoration('Deskripsi', Icons.notes_rounded),
+                      validator: (value) => (value == null || value.isEmpty) ? 'Deskripsi wajib diisi' : null,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _ingredientsController,
+                      maxLines: 3,
+                      decoration: _buildInputDecoration('Bahan-bahan (pisahkan koma)', Icons.receipt_long_rounded),
+                      validator: (value) => (value == null || value.isEmpty) ? 'Bahan wajib diisi' : null,
+                    ),
+                    const SizedBox(height: 32),
+                    ElevatedButton(
+                      onPressed: _saveRecipe,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryDark,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        isEditMode ? 'Simpan Perubahan' : 'Terbitkan Resep',
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildChipSelector({
     required String label,
     required List<String> options,
@@ -149,188 +309,43 @@ class _AddRecipeDialogState extends ConsumerState<AddRecipeDialog> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black87)),
+        Text(label, style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.grey[600])),
         const SizedBox(height: 8),
         Wrap(
           spacing: 8.0,
+          runSpacing: 8.0,
           children: options.map((item) {
             final isSelected = item == selectedValue;
             return ChoiceChip(
               label: Text(item),
               selected: isSelected,
-              selectedColor: primaryMain.withOpacity(0.1),
+              selectedColor: primaryDark.withOpacity(0.2),
               onSelected: (selected) { if (selected) onSelected(item); },
               backgroundColor: Colors.grey[100],
+              showCheckmark: false,
               labelStyle: TextStyle(
-                color: isSelected ? primaryDark : Colors.black87,
+                color: isSelected ? primaryMain : Colors.black87,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),
-              side: BorderSide(color: isSelected ? primaryDark : Colors.grey.shade300, width: 1.2),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              side: BorderSide(color: isSelected ? primaryDark : Colors.transparent),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             );
           }).toList(),
         ),
       ],
     );
   }
+}
 
-  Widget _buildSubCategoryInput() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Sub-kategori Kustom ($_selectedCategory)', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black87)),
-        const SizedBox(height: 8),
-        TextFormField(
-          controller: _subCategoryController,
-          decoration: InputDecoration(
-            labelText: 'Contoh: Padang, Italia, Puding Buah',
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            prefixIcon: const Icon(Icons.category_outlined),
-            isDense: true,
-          ),
-        ),
-      ],
-    );
-  }
+class _SectionTitle extends StatelessWidget {
+  final String title;
+  const _SectionTitle({required this.title});
 
   @override
   Widget build(BuildContext context) {
-    final isEditMode = widget.recipe != null;
-
-    return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      child: Container(
-        constraints: const BoxConstraints(maxWidth: 600, maxHeight: 750),
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: const BoxDecoration(
-                color: primaryDark,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              ),
-              child: Row(
-                children: [
-                  Icon(isEditMode ? Icons.edit : Icons.add_circle, color: Colors.white, size: 28),
-                  const SizedBox(width: 12),
-                  Text(isEditMode ? 'Edit Resep' : 'Tambah Resep', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
-                  const Spacer(),
-                  IconButton(icon: const Icon(Icons.close, color: Colors.white), onPressed: () => Navigator.pop(context)),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Form(
-                key: _formKey,
-                child: ListView(
-                  padding: const EdgeInsets.all(20),
-                  children: [
-                    const Text('Pilih Icon Resep', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 8),
-                    Container(
-                      height: 120,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey[300]!),
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.white,
-                      ),
-                      child: GridView.builder(
-                        padding: const EdgeInsets.all(8),
-                        scrollDirection: Axis.horizontal,
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3, childAspectRatio: 1, crossAxisSpacing: 4, mainAxisSpacing: 4,
-                        ),
-                        itemCount: _emojis.length,
-                        itemBuilder: (context, index) {
-                          final emoji = _emojis[index];
-                          final isSelected = emoji == _selectedEmoji;
-                          return GestureDetector(
-                            onTap: () { setState(() { _selectedEmoji = emoji; }); },
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 200),
-                              decoration: BoxDecoration(
-                                color: isSelected ? primaryMain.withOpacity(0.2) : Colors.transparent,
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: isSelected ? primaryDark : Colors.transparent, width: 2),
-                              ),
-                              child: Center(child: Text(emoji, style: const TextStyle(fontSize: 28))),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _nameController,
-                      decoration: InputDecoration(
-                        labelText: 'Nama Resep',
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                        prefixIcon: const Icon(Icons.restaurant_menu),
-                        isDense: true,
-                      ),
-                      validator: (value) => (value == null || value.isEmpty) ? 'Nama resep tidak boleh kosong' : null,
-                    ),
-                    const SizedBox(height: 16),
-                    _buildChipSelector(label: 'Kategori Utama', options: _categories, selectedValue: _selectedCategory, onSelected: (value) { setState(() { _selectedCategory = value; }); }),
-                    const SizedBox(height: 16),
-                    _buildSubCategoryInput(),
-                    const SizedBox(height: 16),
-                    _buildChipSelector(label: 'Tingkat Kesulitan', options: _difficulties, selectedValue: _selectedDifficulty, onSelected: (value) { setState(() { _selectedDifficulty = value; }); }),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _cookTimeController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: 'Waktu Memasak (menit)',
-                        suffixText: 'menit',
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                        prefixIcon: const Icon(Icons.access_time),
-                        isDense: true,
-                      ),
-                      validator: (value) => (value == null || value.isEmpty) ? 'Waktu memasak wajib diisi' : null,
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _descriptionController,
-                      decoration: InputDecoration(
-                        labelText: 'Deskripsi',
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                        prefixIcon: const Icon(Icons.description),
-                        isDense: true,
-                      ),
-                      maxLines: 2,
-                      validator: (value) => (value == null || value.isEmpty) ? 'Deskripsi wajib diisi' : null,
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _ingredientsController,
-                      decoration: InputDecoration(
-                        labelText: 'Bahan-bahan',
-                        hintText: 'Pisahkan dengan koma atau enter',
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                        prefixIcon: const Icon(Icons.list_alt),
-                        isDense: true,
-                      ),
-                      maxLines: 3,
-                      validator: (value) => (value == null || value.isEmpty) ? 'Bahan wajib diisi' : null,
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: _saveRecipe,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryDark, padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        elevation: 4,
-                      ),
-                      child: Text(isEditMode ? 'Perbarui Resep' : 'Simpan Resep', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+    return Text(
+      title,
+      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, letterSpacing: 0.5),
     );
   }
 }

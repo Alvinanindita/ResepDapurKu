@@ -17,7 +17,7 @@ class HistoryScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Riwayat Edit Resep Terakhir', style: TextStyle(color: Colors.white)),
+        title: const Text('Edit Resep Terakhir', style: TextStyle(color: Colors.white)),
         backgroundColor: const Color.fromARGB(255, 30, 205, 117), // primaryDark
         actions: [
           // Tombol untuk menghapus semua riwayat

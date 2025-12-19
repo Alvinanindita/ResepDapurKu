@@ -170,6 +170,12 @@ class RecipeHomePage extends ConsumerWidget {
                     ref.read(selectedCategoryProvider.notifier).state = 'Dessert';
                   },
                 ),
+                // ✨ TAMBAHAN: Kategori Lainnya
+                CategoryChip(
+                  label: 'Lainnya',
+                  isSelected: selectedCategory == 'Lainnya',
+                  onTap: () => ref.read(selectedCategoryProvider.notifier).state = 'Lainnya',
+                ),
               ],
             ),
           ),
