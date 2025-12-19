@@ -1,4 +1,4 @@
-// lib/screens/home_screen.dart (Desain Baru)
+// lib/screens/home_screen.dart
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,12 +12,10 @@ import 'add_recipe_screen.dart';
 class RecipeHomePage extends ConsumerWidget {
   const RecipeHomePage({super.key});
 
-  // Mempertahankan warna oranye yang lama
-  static const Color primaryDark = Color.fromARGB(255, 30, 205, 117); // #1ECD75 (Aksen Cerah/Fresh)
-  static const Color primaryMain = Color(0xFF4A9969); // Hijau Hutan/Dasar
-  static const Color primaryLight = Color(0xFFEAF5EC); // Hijau Pucat/Latar Belakang Card
+  static const Color primaryDark = Color.fromARGB(255, 30, 205, 117); 
+  static const Color primaryMain = Color(0xFF4A9969); 
+  static const Color primaryLight = Color(0xFFEAF5EC); 
 
-  // Metode untuk Empty State
   Widget _buildEmptyState(bool showFav) {
     return Center(
       child: Column(
@@ -48,10 +46,10 @@ class RecipeHomePage extends ConsumerWidget {
     final userName = ref.watch(userNameProvider); 
 
     return Container(
-      color: Colors.white, // Ganti warna dasar Container ke putih
+      color: Colors.white, 
       child: Column(
         children: [
-          // ====================== HEADER KUSTOM (Desain Lebih Ringkas) ======================
+          // ====================== HEADER KUSTOM ======================
           Container(
             color: primaryDark,
             padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 8, bottom: 8, left: 16, right: 16),
@@ -74,7 +72,6 @@ class RecipeHomePage extends ConsumerWidget {
                     ),
                   ],
                 ),
-                // Icon Menu Samping Kanan (Breadcrumbs)
                 IconButton(
                   icon: const Icon(Icons.menu, color: Colors.white, size: 28), 
                   onPressed: () {
@@ -86,14 +83,12 @@ class RecipeHomePage extends ConsumerWidget {
             ),
           ),
 
-          // ====================== SEARCH BAR & CATEGORY DI DALAM CONTAINER TERPISAH ======================
-          
-          // 1. Search Bar (Dibuat lebih menonjol dengan latar belakang yang lebih terang)
+          // ====================== SEARCH BAR ======================
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: primaryDark, // Menggunakan warna gelap untuk latar belakang Search Bar
+              color: primaryDark,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
@@ -103,8 +98,15 @@ class RecipeHomePage extends ConsumerWidget {
               ],
             ),
             child: TextFormField( 
-              key: ValueKey(searchQuery), 
-              initialValue: searchQuery,
+              // PERBAIKAN: Key dihapus atau diganti menjadi statis agar widget tidak rebuild total saat mengetik
+              // initialValue hanya dipasang sekali. Jika ingin reset via tombol 'clear', 
+              // disarankan menggunakan TextEditingController, namun cara termudah tanpa merombak banyak kode adalah:
+              controller: TextEditingController.fromValue(
+                TextEditingValue(
+                  text: searchQuery,
+                  selection: TextSelection.collapsed(offset: searchQuery.length),
+                ),
+              ),
               onChanged: (value) {
                 ref.read(searchQueryProvider.notifier).state = value;
               },
@@ -122,21 +124,20 @@ class RecipeHomePage extends ConsumerWidget {
                     : null,
                 filled: true,
                 fillColor: Colors.white,
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10), // Ubah radius
+                  borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide.none,
                 ),
               ),
             ),
           ),
           
-          // 2. Category Filter (Dibuat menempel dan lebih minimalis)
+          // ====================== CATEGORY FILTER ======================
           Container(
             height: 50,
             width: double.infinity,
-            color: Colors.grey[50], // Warna latar yang sangat terang/putih
+            color: Colors.grey[50], 
             child: ListView(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -152,8 +153,7 @@ class RecipeHomePage extends ConsumerWidget {
                   label: 'Indonesian',
                   isSelected: selectedCategory == 'Indonesian',
                   onTap: () {
-                    ref.read(selectedCategoryProvider.notifier).state =
-                        'Indonesian';
+                    ref.read(selectedCategoryProvider.notifier).state = 'Indonesian';
                   },
                 ),
                 CategoryChip(
@@ -174,7 +174,6 @@ class RecipeHomePage extends ConsumerWidget {
             ),
           ),
 
-          // ====================== FAVORITE ALERT ======================
           if (showOnlyFavorites)
             Container(
               width: double.infinity,
@@ -215,8 +214,7 @@ class RecipeHomePage extends ConsumerWidget {
                         ? GridView.builder(
                             padding: const EdgeInsets.all(16),
                             itemCount: filteredRecipes.length,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
                               childAspectRatio: 0.8,
                               mainAxisSpacing: 16,
@@ -236,7 +234,6 @@ class RecipeHomePage extends ConsumerWidget {
                             },
                           ),
                 
-                // Floating Action Button
                 Positioned(
                   bottom: 16,
                   right: 16,

@@ -145,13 +145,6 @@ class AppDrawer extends ConsumerWidget {
                     ref.read(viewModeProvider.notifier).toggleViewMode(nextMode);
                   },
                 ),
-                const Divider(),
-                // Fitur Logout
-                ListTile(
-                  leading: const Icon(Icons.logout, color: Colors.red),
-                  title: const Text('Logout'),
-                  onTap: () => _logout(context, ref),
-                ),
               ],
             ),
           ),
