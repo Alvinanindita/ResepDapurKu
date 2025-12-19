@@ -1,17 +1,16 @@
 // lib/widgets/app_drawer.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/user_provider.dart';
 import '../providers/recipe_providers.dart';
-import '../screens/login_screen.dart'; 
+import '../screens/login_screen.dart';
 
 class AppDrawer extends ConsumerWidget {
   const AppDrawer({super.key});
 
- static const Color primaryDark = Color.fromARGB(255, 30, 205, 117);
- 
-  // Dialog sederhana untuk mengubah nama
+  // Warna hijau kustom sesuai desain awal
+  static const Color primaryDark = Color.fromARGB(255, 30, 205, 117);
+
   void _showChangeNameDialog(BuildContext context, WidgetRef ref, String currentName) {
     final TextEditingController controller = TextEditingController(text: currentName);
     final formKey = GlobalKey<FormState>();
@@ -26,7 +25,7 @@ class AppDrawer extends ConsumerWidget {
             controller: controller,
             decoration: const InputDecoration(labelText: 'Nama Baru'),
             validator: (value) {
-              if (value == null || value.isEmpty) {
+              if (value == null || value.trim().isEmpty) {
                 return 'Nama tidak boleh kosong';
               }
               return null;
@@ -39,34 +38,41 @@ class AppDrawer extends ConsumerWidget {
             child: const Text('Batal'),
           ),
           ElevatedButton(
-            onPressed: () {
+            style: ElevatedButton.styleFrom(backgroundColor: primaryDark),
+            onPressed: () async {
               if (formKey.currentState!.validate()) {
-                ref.read(userNameProvider.notifier).state = controller.text.trim();
-                Navigator.of(ctx).pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Nama berhasil diubah!')),
-                );
+                final newName = controller.text.trim();
+                
+                // Mengambil notifier sebelum proses asinkron untuk keamanan state
+                final userNotifier = ref.read(userNameProvider.notifier);
+                await userNotifier.setUserName(newName);
+                
+                if (ctx.mounted) {
+                  Navigator.of(ctx).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Nama berhasil diubah!')),
+                  );
+                }
               }
             },
-            child: const Text('Simpan'),
+            child: const Text('Simpan', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
     );
   }
-  
-  // Fungsi Logout
-  void _logout(BuildContext context, WidgetRef ref) {
-    // Kosongkan state pengguna
-    ref.read(userNameProvider.notifier).state = null;
-    
-    // Navigasi kembali ke layar login
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => const LoginScreen()),
-      (Route<dynamic> route) => false,
-    );
-  }
 
+  void _logout(BuildContext context, WidgetRef ref) async {
+    // Memanggil method logout dari notifier agar data di SharedPreferences terhapus
+    await ref.read(userNameProvider.notifier).logout();
+    
+    if (context.mounted) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+        (Route<dynamic> route) => false,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -77,7 +83,7 @@ class AppDrawer extends ConsumerWidget {
     return Drawer(
       child: Column(
         children: [
-          // Header Drawer Kustom
+          // Header Drawer berwarna hijau
           Container(
             padding: EdgeInsets.only(
               top: MediaQuery.of(context).padding.top + 20, 
@@ -102,28 +108,22 @@ class AppDrawer extends ConsumerWidget {
               ],
             ),
           ),
-
-          // Menu Utama
           Expanded(
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
-                // 1. Opsi Ubah Nama
                 ListTile(
                   leading: const Icon(Icons.edit_note, color: primaryDark),
                   title: const Text('Ubah Nama Pengguna'),
                   onTap: () {
-                    Navigator.of(context).pop(); // Tutup drawer
+                    // Navigator.of(context).pop(); // DIHAPUS agar drawer tetap terbuka di belakang dialog
                     _showChangeNameDialog(context, ref, userName ?? 'Tamu');
                   },
                 ),
-                
                 const Divider(),
-                
-                // 2. Opsi Filter Favorit (DIPINDAHKAN dari Home Screen)
+                // Fitur Tampilkan Favorit
                 SwitchListTile(
                   title: const Text('Tampilkan Favorit Saja'),
-                  subtitle: Text(showOnlyFavorites ? 'Aktif' : 'Tidak Aktif'),
                   secondary: Icon(
                     showOnlyFavorites ? Icons.favorite : Icons.favorite_border,
                     color: showOnlyFavorites ? Colors.red : primaryDark,
@@ -133,8 +133,7 @@ class AppDrawer extends ConsumerWidget {
                     ref.read(showOnlyFavoritesProvider.notifier).state = newValue;
                   },
                 ),
-
-                // 3. Opsi Ganti Tampilan (DIPINDAHKAN dari Home Screen)
+                // Fitur Ganti Tampilan Grid/List
                 ListTile(
                   leading: Icon(
                     viewMode == ViewMode.grid ? Icons.grid_view : Icons.list,
@@ -142,14 +141,12 @@ class AppDrawer extends ConsumerWidget {
                   ),
                   title: Text('Ganti Tampilan (${viewMode == ViewMode.grid ? 'Grid' : 'List'})'),
                   onTap: () {
-                    ref.read(viewModeProvider.notifier).state =
-                        viewMode == ViewMode.grid ? ViewMode.list : ViewMode.grid;
+                    final nextMode = viewMode == ViewMode.grid ? ViewMode.list : ViewMode.grid;
+                    ref.read(viewModeProvider.notifier).toggleViewMode(nextMode);
                   },
                 ),
-                
                 const Divider(),
-
-                // 4. Tombol Logout
+                // Fitur Logout
                 ListTile(
                   leading: const Icon(Icons.logout, color: Colors.red),
                   title: const Text('Logout'),

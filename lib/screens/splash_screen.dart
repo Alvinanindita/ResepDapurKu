@@ -1,14 +1,19 @@
-import 'package:flutter/material.dart';
-import 'login_screen.dart';
+// lib/screens/splash_screen.dart
 
-class SplashScreen extends StatefulWidget {
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'login_screen.dart';
+import 'main_tab_screen.dart';
+
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
+class _SplashScreenState extends ConsumerState<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
@@ -39,23 +44,30 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
 
-    // Navigasi ke home setelah 3 detik
-    Future.delayed(const Duration(seconds: 3), () {
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                const LoginScreen(),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              return FadeTransition(opacity: animation, child: child);
-            },
-            transitionDuration: const Duration(milliseconds: 500),
-          ),
-        );
-      }
-    });
+    _checkLoginStatus();
+  }
+
+  // ✨ Logika pengecekan status login otomatis
+  Future<void> _checkLoginStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? savedName = prefs.getString('user_name');
+
+    await Future.delayed(const Duration(seconds: 3));
+
+    if (!mounted) return;
+
+    Widget nextScreen = (savedName == null) ? const LoginScreen() : const MainTabScreen();
+
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => nextScreen,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+        transitionDuration: const Duration(milliseconds: 500),
+      ),
+    );
   }
 
   @override
@@ -86,7 +98,6 @@ class _SplashScreenState extends State<SplashScreen>
               child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // 📖 Ikon tanpa background
                   Text(
                     '🥘',
                     style: TextStyle(
@@ -101,7 +112,6 @@ class _SplashScreenState extends State<SplashScreen>
                     ),
                   ),
                   SizedBox(height: 30),
-                  // Judul
                   Text(
                     'Resep Dapurku',
                     style: TextStyle(

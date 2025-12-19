@@ -18,14 +18,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   static const Color primaryDark = Color.fromARGB(255, 30, 205, 117);
 
-  void _login() {
+  void _login() async {
     if (_formKey.currentState!.validate()) {
       final userName = _nameController.text.trim();
 
-      // Simpan nama pengguna ke provider
-      ref.read(userNameProvider.notifier).state = userName;
+      // ✨ Simpan nama secara permanen menggunakan notifier
+      await ref.read(userNameProvider.notifier).setUserName(userName);
 
-      // Navigasi ke MainTabScreen
+      if (!mounted) return;
+
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const MainTabScreen()),
       );

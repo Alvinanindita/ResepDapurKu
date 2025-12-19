@@ -159,22 +159,16 @@ class _RecipeListItemState extends ConsumerState<RecipeListItem>
                 ),
 
                 // 3. Tombol Favorit
+                // Di dalam lib/widgets/recipe_list_item.dart pada IconButton Favorit:
                 IconButton(
-                  constraints: const BoxConstraints(),
-                  padding: const EdgeInsets.only(left: 8),
                   icon: Icon(
                     isFavorite ? Icons.favorite : Icons.favorite_border,
                     color: isFavorite ? Colors.red : Colors.grey.shade400,
                     size: 22,
                   ),
                   onPressed: () {
-                    final newFavorites = Set<String>.from(favorites);
-                    if (isFavorite) {
-                      newFavorites.remove(widget.recipe.id);
-                    } else {
-                      newFavorites.add(widget.recipe.id);
-                    }
-                    ref.read(favoritesProvider.notifier).state = newFavorites;
+                    // ✨ Cukup panggil fungsi toggleFavorite dari notifier
+                    ref.read(favoritesProvider.notifier).toggleFavorite(widget.recipe.id);
                   },
                 ),
               ],
