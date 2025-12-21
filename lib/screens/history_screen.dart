@@ -25,7 +25,7 @@ class HistoryScreen extends ConsumerWidget {
             onPressed: historyRecipes.isEmpty 
               ? null 
               : () {
-                // ✨ Panggil fungsi clear dari notifier agar terhapus juga di memori HP
+                // Panggil fungsi clear dari notifier agar terhapus juga di memori HP
                 ref.read(historyProvider.notifier).clearHistory();
                 
                 ScaffoldMessenger.of(context).showSnackBar(

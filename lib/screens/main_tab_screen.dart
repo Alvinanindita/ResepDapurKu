@@ -1,10 +1,9 @@
-// lib/screens/main_tab_screen.dart (Modifikasi)
+// lib/screens/main_tab_screen.dart 
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/recipe_providers.dart';
-// Import provider baru
-import '../widgets/app_drawer.dart'; // Import Drawer baru
+import '../widgets/app_drawer.dart'; 
 import 'home_screen.dart';
 import 'history_screen.dart';
 import 'info_screen.dart';
@@ -23,7 +22,6 @@ class MainTabScreen extends ConsumerWidget {
     final selectedIndex = ref.watch(currentTabIndexProvider);
 
     return Scaffold(
-      // Tambahkan Drawer di sini
       endDrawer: const AppDrawer(), 
       
       body: IndexedStack(

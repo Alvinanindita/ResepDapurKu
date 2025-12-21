@@ -22,7 +22,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (_formKey.currentState!.validate()) {
       final userName = _nameController.text.trim();
 
-      // ✨ Simpan nama secara permanen menggunakan notifier
+      // Simpan nama secara permanen menggunakan notifier
       await ref.read(userNameProvider.notifier).setUserName(userName);
 
       if (!mounted) return;

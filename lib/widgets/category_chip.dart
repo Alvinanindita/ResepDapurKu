@@ -12,7 +12,6 @@ class CategoryChip extends StatelessWidget {
     required this.onTap,
   });
 
-  // Definisikan warna yang digunakan
   static const Color primaryColor = Color.fromARGB(255, 30, 205, 117); // Oranye utama
 
   @override
@@ -29,11 +28,9 @@ class CategoryChip extends StatelessWidget {
             vertical: 8,    
           ),
           decoration: BoxDecoration(
-            // 1. Latar Belakang Penuh 
             color: isSelected ? primaryColor : Colors.white,
             borderRadius: BorderRadius.circular(25), 
             
-            // 2. Bayangan/Elevasi 
             boxShadow: isSelected
                 ? [
                     BoxShadow(

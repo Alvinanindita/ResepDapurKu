@@ -98,9 +98,7 @@ class RecipeHomePage extends ConsumerWidget {
               ],
             ),
             child: TextFormField( 
-              // PERBAIKAN: Key dihapus atau diganti menjadi statis agar widget tidak rebuild total saat mengetik
               // initialValue hanya dipasang sekali. Jika ingin reset via tombol 'clear', 
-              // disarankan menggunakan TextEditingController, namun cara termudah tanpa merombak banyak kode adalah:
               controller: TextEditingController.fromValue(
                 TextEditingValue(
                   text: searchQuery,
@@ -170,7 +168,7 @@ class RecipeHomePage extends ConsumerWidget {
                     ref.read(selectedCategoryProvider.notifier).state = 'Dessert';
                   },
                 ),
-                // ✨ TAMBAHAN: Kategori Lainnya
+                // Kategori Lainnya
                 CategoryChip(
                   label: 'Lainnya',
                   isSelected: selectedCategory == 'Lainnya',

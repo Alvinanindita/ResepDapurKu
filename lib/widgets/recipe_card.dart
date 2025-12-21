@@ -1,4 +1,4 @@
-// lib/widgets/recipe_card.dart (Desain Grid Lebih Menarik)
+// lib/widgets/recipe_card.dart 
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,7 +21,7 @@ class _RecipeCardState extends ConsumerState<RecipeCard>
   late Animation<double> _scaleAnimation;
   
   // Mempertahankan konstanta warna dari Home Screen
-   static const Color primaryDark = Color.fromARGB(255, 30, 205, 117); // #1ECD75 (Aksen Cerah/Fresh)
+   static const Color primaryDark = Color.fromARGB(255, 30, 205, 117); // #1ECD75 
   static const Color primaryMain = Color(0xFF4A9969);
 
   @override
@@ -81,11 +81,10 @@ class _RecipeCardState extends ConsumerState<RecipeCard>
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(16), // Ubah radius
-            // Border dihilangkan, diganti dengan shadow yang lebih kuat
+            borderRadius: BorderRadius.circular(16), 
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.08), // Bayangan yang lebih terlihat
+                color: Colors.black.withOpacity(0.08), 
                 blurRadius: 15,
                 offset: const Offset(0, 8),
               ),

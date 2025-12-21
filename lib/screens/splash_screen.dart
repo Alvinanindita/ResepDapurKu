@@ -47,7 +47,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     _checkLoginStatus();
   }
 
-  // ✨ Logika pengecekan status login otomatis
+  // Logika pengecekan status login otomatis
   Future<void> _checkLoginStatus() async {
     final prefs = await SharedPreferences.getInstance();
     final String? savedName = prefs.getString('user_name');

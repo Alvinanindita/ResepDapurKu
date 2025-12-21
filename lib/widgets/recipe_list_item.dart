@@ -20,7 +20,6 @@ class _RecipeListItemState extends ConsumerState<RecipeListItem>
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   
-  // Menggunakan warna hijau yang konsisten dengan tema Anda
   static const Color primaryDark = Color(0xFF1ECD75); 
 
   @override
@@ -126,10 +125,9 @@ class _RecipeListItemState extends ConsumerState<RecipeListItem>
                       ),
                       const SizedBox(height: 6),
                       
-                      // Perbaikan Utama: Menggunakan Wrap agar tidak overflow
                       Wrap(
-                        spacing: 6, // Jarak horizontal antar item
-                        runSpacing: 4, // Jarak vertikal jika item turun ke bawah
+                        spacing: 6, 
+                        runSpacing: 4, 
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           _buildInfoChip(
@@ -142,7 +140,7 @@ class _RecipeListItemState extends ConsumerState<RecipeListItem>
                             label: widget.recipe.difficulty, 
                             color: difficultyColor
                           ),
-                          // Gunakan Flexible di dalam Wrap agar teks kategori bisa dipotong jika terlalu panjang
+                          
                           Text(
                             widget.recipe.category,
                             style: TextStyle(
@@ -159,7 +157,6 @@ class _RecipeListItemState extends ConsumerState<RecipeListItem>
                 ),
 
                 // 3. Tombol Favorit
-                // Di dalam lib/widgets/recipe_list_item.dart pada IconButton Favorit:
                 IconButton(
                   icon: Icon(
                     isFavorite ? Icons.favorite : Icons.favorite_border,
@@ -167,7 +164,6 @@ class _RecipeListItemState extends ConsumerState<RecipeListItem>
                     size: 22,
                   ),
                   onPressed: () {
-                    // ✨ Cukup panggil fungsi toggleFavorite dari notifier
                     ref.read(favoritesProvider.notifier).toggleFavorite(widget.recipe.id);
                   },
                 ),
