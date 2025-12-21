@@ -35,7 +35,7 @@ class RecipeNotifier extends StateNotifier<List<Recipe>> {
   }
 }
 
-// ✨ NOTIFIER BARU UNTUK HISTORY (SIMPAN PERMANEN)
+// NOTIFIER BARU UNTUK HISTORY (SIMPAN PERMANEN)
 class HistoryNotifier extends StateNotifier<List<Recipe>> {
   HistoryNotifier() : super([]) {
     _loadHistory();
@@ -76,7 +76,7 @@ class HistoryNotifier extends StateNotifier<List<Recipe>> {
 // Provider Utama
 final recipesProvider = StateNotifierProvider<RecipeNotifier, List<Recipe>>((ref) => RecipeNotifier());
 
-// ✨ PROVIDER HISTORY (DIRUBAH JADI STATENOTIFIER)
+// PROVIDER HISTORY 
 final historyProvider = StateNotifierProvider<HistoryNotifier, List<Recipe>>((ref) => HistoryNotifier());
 
 final selectedCategoryProvider = StateProvider<String>((ref) => 'Semua');

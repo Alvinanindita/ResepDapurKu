@@ -19,7 +19,7 @@ class Recipe {
     required this.ingredients,
   });
 
-  // ✨ Ubah ke Map untuk JSON
+  //Ubah ke Map untuk JSON
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -33,7 +33,7 @@ class Recipe {
     };
   }
 
-  // ✨ Ambil dari Map (JSON)
+  //Ambil dari Map (JSON)
   factory Recipe.fromMap(Map<String, dynamic> map) {
     return Recipe(
       id: map['id'],

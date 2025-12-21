@@ -8,7 +8,6 @@ import '../screens/login_screen.dart';
 class AppDrawer extends ConsumerWidget {
   const AppDrawer({super.key});
 
-  // Warna hijau kustom sesuai desain awal
   static const Color primaryDark = Color.fromARGB(255, 30, 205, 117);
 
   void _showChangeNameDialog(BuildContext context, WidgetRef ref, String currentName) {
@@ -83,7 +82,6 @@ class AppDrawer extends ConsumerWidget {
     return Drawer(
       child: Column(
         children: [
-          // Header Drawer berwarna hijau
           Container(
             padding: EdgeInsets.only(
               top: MediaQuery.of(context).padding.top + 20, 
@@ -116,7 +114,7 @@ class AppDrawer extends ConsumerWidget {
                   leading: const Icon(Icons.edit_note, color: primaryDark),
                   title: const Text('Ubah Nama Pengguna'),
                   onTap: () {
-                    // Navigator.of(context).pop(); // DIHAPUS agar drawer tetap terbuka di belakang dialog
+                    // Navigator.of(context).pop(); 
                     _showChangeNameDialog(context, ref, userName ?? 'Tamu');
                   },
                 ),
