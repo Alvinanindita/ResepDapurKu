@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/user_provider.dart';
 import '../providers/recipe_providers.dart';
 import '../screens/login_screen.dart';
+import '../screens/info_screen.dart'; // Impor halaman info
 
 class AppDrawer extends ConsumerWidget {
   const AppDrawer({super.key});
@@ -42,7 +43,6 @@ class AppDrawer extends ConsumerWidget {
               if (formKey.currentState!.validate()) {
                 final newName = controller.text.trim();
                 
-                // Mengambil notifier sebelum proses asinkron untuk keamanan state
                 final userNotifier = ref.read(userNameProvider.notifier);
                 await userNotifier.setUserName(newName);
                 
@@ -62,7 +62,6 @@ class AppDrawer extends ConsumerWidget {
   }
 
   void _logout(BuildContext context, WidgetRef ref) async {
-    // Memanggil method logout dari notifier agar data di SharedPreferences terhapus
     await ref.read(userNameProvider.notifier).logout();
     
     if (context.mounted) {
@@ -82,6 +81,7 @@ class AppDrawer extends ConsumerWidget {
     return Drawer(
       child: Column(
         children: [
+          // Header Drawer
           Container(
             padding: EdgeInsets.only(
               top: MediaQuery.of(context).padding.top + 20, 
@@ -106,6 +106,8 @@ class AppDrawer extends ConsumerWidget {
               ],
             ),
           ),
+          
+          // List Menu
           Expanded(
             child: ListView(
               padding: EdgeInsets.zero,
@@ -114,11 +116,11 @@ class AppDrawer extends ConsumerWidget {
                   leading: const Icon(Icons.edit_note, color: primaryDark),
                   title: const Text('Ubah Nama Pengguna'),
                   onTap: () {
-                    // Navigator.of(context).pop(); 
                     _showChangeNameDialog(context, ref, userName ?? 'Tamu');
                   },
                 ),
                 const Divider(),
+                
                 // Fitur Tampilkan Favorit
                 SwitchListTile(
                   title: const Text('Tampilkan Favorit Saja'),
@@ -131,6 +133,7 @@ class AppDrawer extends ConsumerWidget {
                     ref.read(showOnlyFavoritesProvider.notifier).state = newValue;
                   },
                 ),
+                
                 // Fitur Ganti Tampilan Grid/List
                 ListTile(
                   leading: Icon(
@@ -143,11 +146,26 @@ class AppDrawer extends ConsumerWidget {
                     ref.read(viewModeProvider.notifier).toggleViewMode(nextMode);
                   },
                 ),
+                
+                const Divider(),
+
+                // MENU BARU: Informasi Aplikasi
+                ListTile(
+                  leading: const Icon(Icons.info_outline, color: primaryDark),
+                  title: const Text('Informasi Pengembang'),
+                  onTap: () {
+                    Navigator.of(context).pop(); 
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const InfoScreen()),
+                    );
+                  },
+                ),
+
               ],
             ),
           ),
         ],
       ),
     );
-  }
+  } 
 }
