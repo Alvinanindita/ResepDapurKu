@@ -10,7 +10,7 @@ class InfoScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Informasi Aplikasi', style: TextStyle(color: Colors.white)),
-        backgroundColor: const Color.fromARGB(255, 30, 205, 117), // primaryDark
+        backgroundColor: const Color.fromARGB(255, 30, 205, 117), 
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),

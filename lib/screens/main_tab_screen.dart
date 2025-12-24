@@ -34,7 +34,7 @@ class MainTabScreen extends ConsumerWidget {
         onTap: (index) {
           ref.read(currentTabIndexProvider.notifier).state = index;
         },
-        selectedItemColor: const Color.fromARGB(255, 30, 205, 117), // Primary Dark
+        selectedItemColor: const Color.fromARGB(255, 30, 205, 117), 
         unselectedItemColor: Colors.grey,
         type: BottomNavigationBarType.fixed,
         items: const [
