@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/user_provider.dart';
 import '../providers/recipe_providers.dart';
 import '../screens/login_screen.dart';
-import '../screens/info_screen.dart'; // Impor halaman info
+import '../screens/info_screen.dart'; 
 
 class AppDrawer extends ConsumerWidget {
   const AppDrawer({super.key});
@@ -81,7 +81,7 @@ class AppDrawer extends ConsumerWidget {
     return Drawer(
       child: Column(
         children: [
-          // Header Drawer
+          
           Container(
             padding: EdgeInsets.only(
               top: MediaQuery.of(context).padding.top + 20, 
