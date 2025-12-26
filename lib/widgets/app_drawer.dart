@@ -5,6 +5,7 @@ import '../providers/user_provider.dart';
 import '../providers/recipe_providers.dart';
 import '../screens/login_screen.dart';
 import '../screens/info_screen.dart'; 
+import '../screens/developer_screen.dart';
 
 class AppDrawer extends ConsumerWidget {
   const AppDrawer({super.key});
@@ -149,14 +150,14 @@ class AppDrawer extends ConsumerWidget {
                 
                 const Divider(),
 
-                // MENU BARU: Informasi Aplikasi
+                // MENU: Informasi Pengembang
                 ListTile(
-                  leading: const Icon(Icons.info_outline, color: primaryDark),
+                  leading: const Icon(Icons.person_pin, color: primaryDark),
                   title: const Text('Informasi Pengembang'),
                   onTap: () {
                     Navigator.of(context).pop(); 
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => const InfoScreen()),
+                      MaterialPageRoute(builder: (context) => const DeveloperScreen()),
                     );
                   },
                 ),

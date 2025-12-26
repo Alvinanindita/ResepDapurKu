@@ -1,91 +1,85 @@
-// lib/screens/info_screen.dart
-
 import 'package:flutter/material.dart';
 
 class InfoScreen extends StatelessWidget {
   const InfoScreen({super.key});
 
+  static const Color primaryDark = Color.fromARGB(255, 30, 205, 117);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Informasi Aplikasi', style: TextStyle(color: Colors.white)),
-        backgroundColor: const Color.fromARGB(255, 30, 205, 117), 
+        title: const Text('Tentang Aplikasi', style: TextStyle(color: Colors.white)),
+        backgroundColor: primaryDark,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(24),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Center(
-              child: Text(
-                'Resep Dapurku 📖',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 30, 205, 117),
-                ),
-                textAlign: TextAlign.center,
+            const Text(
+              '🍳',
+              style: TextStyle(fontSize: 80),
+            ),
+            const Text(
+              'Resepku',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: primaryDark,
               ),
             ),
-            const Divider(height: 30, thickness: 1),
-            
-            _buildInfoTile(
-              context,
-              icon: Icons.developer_mode,
-              title: 'Pengembang',
-              subtitle: 'Alvina Nindita Nareswari',
+            const Text(
+              'Versi 1.0.0',
+              style: TextStyle(color: Colors.grey),
             ),
-            _buildInfoTile(
-              context,
-              icon: Icons.code,
-              title: 'Teknologi',
-              subtitle: 'Flutter (Dart) dengan Riverpod State Management',
+            const SizedBox(height: 30),
+            const Text(
+              'Resepku adalah aplikasi asisten dapur pribadi yang membantu Anda menemukan dan mengelola berbagai resep masakan lezat dengan mudah dan cepat.',
+              textAlign: TextAlign.justify,
+              style: TextStyle(fontSize: 16, height: 1.5),
             ),
-            _buildInfoTile(
-              context,
-              icon: Icons.color_lens,
-              title: 'Tema Utama',
-              subtitle: 'Material Design 3 dengan skema warna Hijau',
-            ),
-            _buildInfoTile(
-              context,
-              icon: Icons.data_usage,
-              title: 'Data',
-              subtitle: 'Data resep disimpan secara lokal di dalam memori (Provider)',
-            ),
-    
-           
+            const SizedBox(height: 30),
+            _buildFeatureSection(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildInfoTile(BuildContext context, {required IconData icon, required String title, required String subtitle}) {
+  Widget _buildFeatureSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Fitur Utama:',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        const SizedBox(height: 10),
+        _featureItem(Icons.search, 'Pencarian Resep Cepat'),
+        _featureItem(Icons.favorite, 'Simpan Resep Favorit'),
+        _featureItem(Icons.grid_view, 'Tampilan Grid & List'),
+        _featureItem(Icons.timer, 'Informasi Estimasi Memasak'),
+        const Divider(height: 40),
+        const Text(
+          'Teknologi:',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        const SizedBox(height: 10),
+        const Text('Dibangun menggunakan Flutter & Riverpod untuk performa yang responsif.'),
+      ],
+    );
+  }
+
+  Widget _featureItem(IconData icon, String text) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: const Color.fromARGB(255, 30, 205, 117), size: 24),
-          const SizedBox(width: 15),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: const TextStyle(fontSize: 14, color: Colors.black54),
-                ),
-              ],
-            ),
-          ),
+          Icon(icon, size: 20, color: primaryDark),
+          const SizedBox(width: 12),
+          Text(text, style: const TextStyle(fontSize: 15)),
         ],
       ),
     );
