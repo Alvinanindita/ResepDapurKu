@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/recipe.dart';
 import '../providers/user_provider.dart';
 import 'recipe_detail_sheet.dart';
-import '../providers/recipe_providers.dart'; // Pastikan import ini ada
+import '../providers/recipe_providers.dart'; 
 
 class RecipeCard extends ConsumerStatefulWidget {
   final Recipe recipe;
@@ -86,10 +86,10 @@ class _RecipeCardState extends ConsumerState<RecipeCard>
             children: [
               // ========================= BAGIAN VISUAL ATAS (BOX KONSISTEN) =========================
               AspectRatio(
-                aspectRatio: 1.2, // Mengunci rasio kotak agar seragam di semua card
+                aspectRatio: 1.2, 
                 child: Stack(
                   children: [
-                    // Lapisan Bawah (Warna Latar Belakang Tetap)
+        
                     Positioned.fill(
                       child: Container(
                         margin: const EdgeInsets.all(10),
@@ -183,7 +183,7 @@ class _RecipeCardState extends ConsumerState<RecipeCard>
                     // Info Bawah (Waktu Memasak dan Kesulitan)
                     Row(
                       children: [
-                        // Ikon dengan Border Lingkaran Hijau
+                       
                         Container(
                           padding: const EdgeInsets.all(4),
                           decoration: BoxDecoration(
@@ -202,7 +202,7 @@ class _RecipeCardState extends ConsumerState<RecipeCard>
                         ),
                         const SizedBox(width: 6),
                         
-                        // Teks Lama Memasak
+                        
                         Expanded(
                           child: Text(
                             '${widget.recipe.cookTime}',
