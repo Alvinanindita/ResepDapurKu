@@ -23,17 +23,14 @@ class InfoScreen extends StatelessWidget {
               style: TextStyle(fontSize: 80),
             ),
             const Text(
-              'Resepku',
+              'Aplikasi Resepku',
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
                 color: primaryDark,
               ),
             ),
-            const Text(
-              'Versi 1.0.0',
-              style: TextStyle(color: Colors.grey),
-            ),
+            
             const SizedBox(height: 30),
             const Text(
               'Resepku adalah aplikasi asisten dapur pribadi yang membantu Anda menemukan dan mengelola berbagai resep masakan lezat dengan mudah dan cepat.',
@@ -67,7 +64,7 @@ class InfoScreen extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
         const SizedBox(height: 10),
-        const Text('Dibangun menggunakan Flutter & Riverpod untuk performa yang responsif.'),
+        const Text('Dibangun menggunakan Flutter untuk performa yang responsif.'),
       ],
     );
   }
