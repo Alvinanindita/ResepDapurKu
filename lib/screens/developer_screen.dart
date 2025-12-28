@@ -44,7 +44,7 @@ class DeveloperScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Mobile Developer Enthusiast',
+                    'Mobile Developer',
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.white.withOpacity(0.9),
@@ -60,12 +60,12 @@ class DeveloperScreen extends StatelessWidget {
                   _buildDevCard(
                     icon: Icons.school,
                     title: 'Pendidikan',
-                    content: 'Mahasiswa Teknik Informatika',
+                    content: 'Universitas PGRI Madiun',
                   ),
                   _buildDevCard(
                     icon: Icons.email_outlined,
                     title: 'Kontak',
-                    content: 'alvina.nindita@email.com',
+                    content: 'alvinanindita28@gmail.com',
                   ),
                   _buildDevCard(
                     icon: Icons.link,
