@@ -8,11 +8,11 @@ import '../widgets/recipe_list_item.dart';
 class HistoryScreen extends ConsumerWidget {
   const HistoryScreen({super.key});
 
-  static const Color primaryLight = Color(0xFFEAF5EC); // Hijau Pucat/Latar Belakang Card
+  static const Color primaryLight = Color(0xFFEAF5EC); 
   
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // 1. Ambil data riwayat dari provider
+    
     final historyRecipes = ref.watch(historyProvider);
 
     return Scaffold(
@@ -20,7 +20,7 @@ class HistoryScreen extends ConsumerWidget {
         title: const Text('Edit Resep Terakhir', style: TextStyle(color: Colors.white)),
         backgroundColor: const Color.fromARGB(255, 30, 205, 117), // primaryDark
         actions: [
-          // Tombol untuk menghapus semua riwayat
+        
           TextButton(
             onPressed: historyRecipes.isEmpty 
               ? null 
