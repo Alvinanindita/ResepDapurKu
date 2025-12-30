@@ -43,11 +43,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     );
 
     _controller.forward();
-
     _checkLoginStatus();
   }
 
-  // Logika pengecekan status login otomatis
   Future<void> _checkLoginStatus() async {
     final prefs = await SharedPreferences.getInstance();
     final String? savedName = prefs.getString('user_name');
@@ -95,24 +93,29 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
             opacity: _fadeAnimation,
             child: ScaleTransition(
               scale: _scaleAnimation,
-              child: const Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    '🥘',
-                    style: TextStyle(
-                      fontSize: 100,
-                      shadows: [
-                        Shadow(
-                          blurRadius: 8,
-                          color: Colors.black26,
-                          offset: Offset(2, 2),
+                  // MENGGANTI TEXT EMOJI DENGAN IMAGE ASSET
+                  Container(
+                    width: 150, // Sesuaikan ukuran lebar
+                    height: 150, // Sesuaikan ukuran tinggi
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 15,
+                          offset: const Offset(0, 8),
                         ),
                       ],
                     ),
+                    child: Image.asset(
+                      'assets/images/icon.webp',
+                      fit: BoxFit.contain,
+                    ),
                   ),
-                  SizedBox(height: 30),
-                  Text(
+                  const SizedBox(height: 30),
+                  const Text(
                     'Resep Dapurku',
                     style: TextStyle(
                       fontSize: 32,
