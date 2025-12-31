@@ -29,11 +29,26 @@ class DeveloperScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  const CircleAvatar(
-                    radius: 50,
-                    backgroundColor: Colors.white,
-                    child: Icon(Icons.person, size: 60, color: primaryDark),
+                  // --- BAGIAN FOTO PROFIL DIPERBARUI ---
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 4),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 10,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: const CircleAvatar(
+                      radius: 60, // Ukuran sedikit diperbesar agar lebih jelas
+                      backgroundColor: Colors.white,
+                      backgroundImage: AssetImage('assets/images/foto.jpeg'),
+                    ),
                   ),
+                  // --------------------------------------
                   const SizedBox(height: 15),
                   const Text(
                     'Alvina Nindita Nareswari',
@@ -44,7 +59,7 @@ class DeveloperScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Mobile Developer',
+                    'NIM 2205101047',
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.white.withOpacity(0.9),
