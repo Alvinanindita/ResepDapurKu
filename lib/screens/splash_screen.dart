@@ -96,25 +96,16 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // MENGGANTI TEXT EMOJI DENGAN IMAGE ASSET
-                  Container(
-                    width: 150, // Sesuaikan ukuran lebar
-                    height: 150, // Sesuaikan ukuran tinggi
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 15,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                    ),
+                  // MENGHAPUS BOXDECORATION AGAR TIDAK ADA LATAR HITAM/BAYANGAN GELAP
+                  SizedBox(
+                    width: 220, // Ukuran diperbesar dari 150 ke 220
+                    height: 220, // Ukuran diperbesar dari 150 ke 220
                     child: Image.asset(
-                      'assets/images/icon.webp',
+                      'assets/images/icon11.webp',
                       fit: BoxFit.contain,
                     ),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 20),
                   const Text(
                     'Resep Dapurku',
                     style: TextStyle(
@@ -122,6 +113,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                       letterSpacing: 1.5,
+                      // Memberikan shadow tipis pada teks agar lebih terbaca
+                      shadows: [
+                        Shadow(
+                          blurRadius: 10,
+                          color: Colors.black26,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
                     ),
                   ),
                 ],
