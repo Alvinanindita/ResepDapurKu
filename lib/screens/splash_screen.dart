@@ -96,7 +96,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // MENGHAPUS BOXDECORATION AGAR TIDAK ADA LATAR HITAM/BAYANGAN GELAP
                   SizedBox(
                     width: 220, // Ukuran diperbesar dari 150 ke 220
                     height: 220, // Ukuran diperbesar dari 150 ke 220

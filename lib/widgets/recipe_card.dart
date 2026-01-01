@@ -195,7 +195,7 @@ class _RecipeCardState extends ConsumerState<RecipeCard>
                             ),
                           ),
                           child: const Icon(
-                            Icons.access_time, 
+                            Icons.timer, 
                             size: 12, 
                             color: primaryMain,
                           ),
