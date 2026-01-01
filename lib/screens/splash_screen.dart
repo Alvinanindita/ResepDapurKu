@@ -97,8 +97,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    width: 220, // Ukuran diperbesar dari 150 ke 220
-                    height: 220, // Ukuran diperbesar dari 150 ke 220
+                    width: 220, 
+                    height: 220, 
                     child: Image.asset(
                       'assets/images/icon11.webp',
                       fit: BoxFit.contain,
@@ -112,7 +112,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                       letterSpacing: 1.5,
-                      // Memberikan shadow tipis pada teks agar lebih terbaca
                       shadows: [
                         Shadow(
                           blurRadius: 10,
