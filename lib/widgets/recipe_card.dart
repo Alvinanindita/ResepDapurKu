@@ -84,7 +84,7 @@ class _RecipeCardState extends ConsumerState<RecipeCard>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ========================= BAGIAN VISUAL ATAS (BOX KONSISTEN) =========================
+
               AspectRatio(
                 aspectRatio: 1.2, 
                 child: Stack(

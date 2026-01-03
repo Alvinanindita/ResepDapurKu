@@ -43,12 +43,12 @@ class DeveloperScreen extends StatelessWidget {
                       ],
                     ),
                     child: const CircleAvatar(
-                      radius: 60, // Ukuran sedikit diperbesar agar lebih jelas
+                      radius: 60,
                       backgroundColor: Colors.white,
                       backgroundImage: AssetImage('assets/images/foto.jpeg'),
                     ),
                   ),
-                  // --------------------------------------
+                  
                   const SizedBox(height: 15),
                   const Text(
                     'Alvina Nindita Nareswari',
