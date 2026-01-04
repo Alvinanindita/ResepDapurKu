@@ -29,7 +29,7 @@ class DeveloperScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  // --- BAGIAN FOTO PROFIL DIPERBARUI ---
+                  // --- BAGIAN FOTO PROFIL ---
                   Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,

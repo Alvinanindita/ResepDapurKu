@@ -18,7 +18,7 @@ class HistoryScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Resep Terakhir', style: TextStyle(color: Colors.white)),
-        backgroundColor: const Color.fromARGB(255, 30, 205, 117), // primaryDark
+        backgroundColor: const Color.fromARGB(255, 30, 205, 117), 
         actions: [
         
           TextButton(
