@@ -131,7 +131,7 @@ class _RecipeListItemState extends ConsumerState<RecipeListItem>
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           _buildInfoChip(
-                            icon: Icons.access_time, 
+                            icon: Icons.timer, 
                             label: widget.recipe.cookTime, 
                             color: Colors.orange.shade800
                           ),

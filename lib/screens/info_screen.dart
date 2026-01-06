@@ -18,12 +18,14 @@ class InfoScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Image.asset(
+              'assets/images/icon11.webp', // Pastikan path ini sesuai dengan folder Anda
+                width: 80,          // Sesuaikan ukuran agar pas dengan desain Anda
+                height: 80,
+                fit: BoxFit.contain,
+                ),
             const Text(
-              '🍳',
-              style: TextStyle(fontSize: 80),
-            ),
-            const Text(
-              'Aplikasi Resepku',
+              'Aplikasi Resep Dapurku',
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
@@ -33,7 +35,7 @@ class InfoScreen extends StatelessWidget {
             
             const SizedBox(height: 30),
             const Text(
-              'Resepku adalah aplikasi asisten dapur pribadi yang membantu Anda menemukan dan mengelola berbagai resep masakan lezat dengan mudah dan cepat.',
+              'Resep Dapurku adalah aplikasi asisten dapur pribadi yang membantu Anda menemukan dan mengelola berbagai resep masakan lezat dengan mudah dan cepat.',
               textAlign: TextAlign.justify,
               style: TextStyle(fontSize: 16, height: 1.5),
             ),
