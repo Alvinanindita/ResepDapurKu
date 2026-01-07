@@ -84,8 +84,8 @@ class DeveloperScreen extends StatelessWidget {
                   ),
                   _buildDevCard(
                     icon: Icons.link,
-                    title: 'LinkedIn / GitHub',
-                    content: '@alvinanindita',
+                    title: 'GitHub',
+                    content: 'Alvinanindita',
                   ),
                   const SizedBox(height: 20),
                   const Text(
