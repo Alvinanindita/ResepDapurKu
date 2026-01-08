@@ -26,13 +26,17 @@ Aplikasi katalog resep dapurku sederhana menggunakan Flutter dengan fitur:
 - Filter kategori
 - Riwayat edit resep
 - Info Aplikasi
+- Info Pengembang
 - Ubah nama user
 - UI clean & modern
 
 *Projek ini dibuat untuk memenuhi tugas UTS pada mata kuliah Pemrograman Mobile 2
 
-Dibuat Oleh :
-Alvina Nindita Nareswari
+| Informasi | Pengembang |
+| :--- | :--- |
+| **Dibuat Oleh** | **Alvina Nindita Nareswari** |
+| **Pendidikan** | Universitas PGRI Madiun |
+| **Kontak** | alvinanindita28@gmail.com |
 
 ---
 
