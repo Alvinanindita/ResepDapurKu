@@ -34,9 +34,9 @@ Aplikasi katalog resep dapurku sederhana menggunakan Flutter dengan fitur:
 
 | Informasi | Pengembang |
 | :--- | :--- |
-| **Dibuat Oleh** | **Alvina Nindita Nareswari** |
-| **Pendidikan** | Universitas PGRI Madiun |
-| **Kontak** | alvinanindita28@gmail.com |
+| **Nama** | **Alvina Nindita Nareswari** |
+| **NIM** | 2205101047 |
+| **Kelas** | 7C/TIF |
 
 ---
 
