@@ -45,6 +45,10 @@ Aplikasi katalog resep dapurku sederhana menggunakan Flutter dengan fitur:
 # Kategori Aplikasi
 Makanan dan Minuman
 
+---
+
+# Screenshot
+
 <p align="center">
   <img src="docs/screenshots/halaman_awal.jpg" width="260"/>
   <img src="docs/screenshots/login.jpg" width="260"/>
@@ -123,4 +127,9 @@ Lihat dokumen lengkap: Privacy Policy
 
 Dapur, Masak, Resep harian, Menu keluarga, Buku resep digital, Kuliner, Food Manager, Indonesia Food, Asisten Masak, Resep Praktis.
 
+# Feature Graphic
+
+<p align="center">
+  <img src="assets/images/FG.png" width="260"/>
+</p>
 
