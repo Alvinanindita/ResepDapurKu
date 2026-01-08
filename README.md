@@ -32,6 +32,8 @@ Aplikasi katalog resep dapurku sederhana menggunakan Flutter dengan fitur:
 - Ubah nama user
 - UI clean & modern
 
+---
+
 *Projek ini dibuat untuk memenuhi tugas UTS pada mata kuliah Pemrograman Mobile 2
 
 | Informasi | Pengembang |
