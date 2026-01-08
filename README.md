@@ -1,3 +1,8 @@
+Icon Aplikasi 
+<p align="center">
+  <img src="assets/images/cookbook.png" width="260"/>
+</p>
+
 # 🥘Aplikasi Resep Dapurku
 
 Aplikasi katalog resep dapurku sederhana menggunakan Flutter dengan fitur:
