@@ -3,6 +3,8 @@
   <img src="assets/images/cookbook.png" width="260"/>
 </p>
 
+---
+
 # 🥘Aplikasi Resep Dapurku
 
 Deskripsi Pendek : Aplikasi Resep Dapurku adalah asisten dapur pribadi untuk menemukan, mengelola, dan menyimpan resep masakan lezat dengan mudah
@@ -40,6 +42,9 @@ Aplikasi katalog resep dapurku sederhana menggunakan Flutter dengan fitur:
 
 ---
 
+# Kategori Aplikasi
+Makanan dan Minuman
+
 <p align="center">
   <img src="docs/screenshots/halaman_awal.jpg" width="260"/>
   <img src="docs/screenshots/login.jpg" width="260"/>
@@ -55,4 +60,53 @@ Aplikasi katalog resep dapurku sederhana menggunakan Flutter dengan fitur:
 </p>
 </p>
 
+---
 
+# Kebijakan Privasi (Privacy Policy)
+Terakhir diperbarui: 2026
+
+Resep Dapurku berkomitmen untuk melindungi privasi dan data pengguna. Dokumen ini menjelaskan bagaimana aplikasi mengelola, menyimpan, dan menggunakan informasi yang Anda berikan. Dengan menggunakan Resep Dapurku, Anda dianggap telah memahami dan menyetujui kebijakan privasi ini.
+
+🔐 1. Informasi yang Dikumpulkan Resep Dapurku hanya mengumpulkan jenis informasi berikut:
+
+Nama pengguna: Digunakan untuk keperluan personalisasi tampilan di dalam aplikasi.
+
+Data Resep: Meliputi nama masakan, kategori, sub-kategori, bahan-bahan, dan deskripsi yang Anda masukkan secara manual.
+
+Aplikasi tidak mengumpulkan informasi sensitif seperti email, lokasi GPS, kontak, atau data pribadi lainnya.
+
+💾 2. Penggunaan Informasi Data yang Anda berikan digunakan hanya untuk:
+
+Menampilkan nama Anda di dalam menu drawer aplikasi.
+
+Menyimpan, mengelola, dan menampilkan daftar resep masakan harian Anda.
+
+Mengelola daftar favorit dan riwayat perubahan resep.
+
+Resep Dapurku tidak mengirimkan data ke server mana pun.
+
+📁 3. Penyimpanan Data
+
+Penyimpanan Lokal: Seluruh data nama pengguna dan resep disimpan secara lokal di perangkat Anda menggunakan Shared Preferences dan Provider state management.
+
+Akses Offline: Aplikasi ini bekerja sepenuhnya secara offline, sehingga tidak ada aktivitas pengunggahan data ke internet.
+
+Kontrol Pengguna: Pengguna dapat mengubah nama pengguna atau menghapus resep kapan saja melalui fitur yang tersedia di aplikasi.
+
+🔒 4. Keamanan Data Resep Dapurku memastikan keamanan informasi Anda dengan prinsip:
+
+Tanpa Pihak Ketiga: Tidak ada pihak ketiga yang dapat mengakses, melihat, atau mengambil data resep Anda.
+
+Tanpa Pelacakan: Tidak ada proses tracking, analitik perilaku, atau iklan yang mengumpulkan data secara otomatis.
+
+Kendali Penuh: Semua data sepenuhnya berada di bawah kendali perangkat fisik pengguna.
+
+👤 5. Hak Pengguna Anda memiliki hak penuh untuk:
+
+Mengubah nama pengguna melalui menu pengaturan/drawer.
+
+Menambah, mengubah, atau menghapus data resep secara permanen.
+
+Penghapusan Data: Seluruh data akan terhapus secara otomatis dan permanen jika Anda menghapus (uninstall) aplikasi dari perangkat Anda, karena data tidak dicadangkan di awan (cloud).
+
+📝 6. Perubahan Kebijakan Privasi Kebijakan ini dapat diperbarui sewaktu-waktu seiring dengan pengembangan fitur aplikasi. Perubahan akan diinformasikan melalui pembaruan aplikasi atau melalui dokumentasi resmi di repositori GitHub pengembang.
