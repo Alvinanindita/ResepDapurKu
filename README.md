@@ -110,3 +110,17 @@ Menambah, mengubah, atau menghapus data resep secara permanen.
 Penghapusan Data: Seluruh data akan terhapus secara otomatis dan permanen jika Anda menghapus (uninstall) aplikasi dari perangkat Anda, karena data tidak dicadangkan di awan (cloud).
 
 📝 6. Perubahan Kebijakan Privasi Kebijakan ini dapat diperbarui sewaktu-waktu seiring dengan pengembangan fitur aplikasi. Perubahan akan diinformasikan melalui pembaruan aplikasi atau melalui dokumentasi resmi di repositori GitHub pengembang.
+
+📬 7. Kontak Developer
+
+Jika Anda memiliki pertanyaan, masukan, atau laporan terkait aplikasi, silakan hubungi:
+Email Developer: alvinanindita28@gmail.com
+Lihat dokumen lengkap: Privacy Policy
+
+---
+
+# Tag
+
+Dapur, Masak, Resep harian, Menu keluarga, Buku resep digital, Kuliner, Food Manager, Indonesia Food, Asisten Masak, Resep Praktis.
+
+
