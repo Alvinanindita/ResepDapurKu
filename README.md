@@ -32,8 +32,7 @@ Aplikasi katalog resep dapurku sederhana menggunakan Flutter dengan fitur:
 
 *Projek ini dibuat untuk memenuhi tugas UTS pada mata kuliah Pemrograman Mobile 2
 
-| Informasi Pengembang |
-| :--- | :--- |
+
 | **Nama** | **Alvina Nindita Nareswari** |
 | **NIM** | 2205101047 |
 | **Kelas** | 7C/TIF |
