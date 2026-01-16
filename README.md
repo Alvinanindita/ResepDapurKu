@@ -52,19 +52,19 @@ Makanan dan Minuman
 # Screenshot
 
 <p align="center">
-  <img src="docs/screenshots/login.jpg" width="260"/>
-  <img src="docs/screenshots/login.jpg" width="260"/>
-  <img src="docs/screenshots/home.jpg" width="260"/>
-  <img src="docs/screenshots/detail resep.jpg" width="260"/>
-  <img src="docs/screenshots/ubah nama pengguna.jpg" width="260"/>
-  <img src="docs/screenshots/riwayat edit.jpg" width="260"/>
-  <img src="docs/screenshots/info aplikasi.jpg" width="260"/>
-  <img src="docs/screenshots/tambah resep.jpg" width="260"/>
-  <img src="docs/screenshots/edit resep.jpg" width="260"/>
-  <img src="docs/screenshots/hapus resep.jpg" width="260"/>
-  <img src="docs/screenshots/hapus pengembang aplikasi.jpg" width="260"/>
-  <img src="docs/screenshots/tampilan format list.jpg" width="260"/>
-  <img src="docs/screenshots/tampilkan favorite.jpg" width="260"/>
+  <img src="docs/screenshots/login.jpeg" width="260"/>
+  <img src="docs/screenshots/login.jpeg" width="260"/>
+  <img src="docs/screenshots/home.jpeg" width="260"/>
+  <img src="docs/screenshots/detail resep.jpeg" width="260"/>
+  <img src="docs/screenshots/ubah nama pengguna.jpeg" width="260"/>
+  <img src="docs/screenshots/riwayat edit.jpeg" width="260"/>
+  <img src="docs/screenshots/info aplikasi.jpeg" width="260"/>
+  <img src="docs/screenshots/tambah resep.jpeg" width="260"/>
+  <img src="docs/screenshots/edit resep.jpeg" width="260"/>
+  <img src="docs/screenshots/hapus resep.jpeg" width="260"/>
+  <img src="docs/screenshots/hapus pengembang aplikasi.jpeg" width="260"/>
+  <img src="docs/screenshots/tampilan format list.jpeg" width="260"/>
+  <img src="docs/screenshots/tampilkan favorite.jpeg" width="260"/>
 </p>
 </p>
 
