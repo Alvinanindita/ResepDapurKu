@@ -53,7 +53,6 @@ Makanan dan Minuman
 
 <p align="center">
   <img src="docs/screenshots/login.jpeg" width="260"/>
-  <img src="docs/screenshots/login.jpeg" width="260"/>
   <img src="docs/screenshots/home.jpeg" width="260"/>
   <img src="docs/screenshots/detail resep.jpeg" width="260"/>
   <img src="docs/screenshots/ubah nama pengguna.jpeg" width="260"/>
@@ -62,9 +61,9 @@ Makanan dan Minuman
   <img src="docs/screenshots/tambah resep.jpeg" width="260"/>
   <img src="docs/screenshots/edit resep.jpeg" width="260"/>
   <img src="docs/screenshots/hapus resep.jpeg" width="260"/>
-  <img src="docs/screenshots/hapus pengembang aplikasi.jpeg" width="260"/>
+  <img src="docs/screenshots/info pengembang aplikasi.jpeg" width="260"/>
   <img src="docs/screenshots/tampilan format list.jpeg" width="260"/>
-  <img src="docs/screenshots/tampilkan favorite.jpeg" width="260"/>
+  <img src="docs/screenshots/tampilkan favorit.jpeg" width="260"/>
 </p>
 </p>
 
